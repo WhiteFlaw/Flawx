@@ -1,0 +1,30 @@
+{
+  "name": "flawx-0.1.9",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "@element-plus/icons": "0.0.11",
+    "@element-plus/icons-vue": "^1.1.4",
+    "axios": "^0.26.1",
+    "body-parser": "^1.20.0",
+    "element-plus": "^2.1.8",
+    "express": "^4.17.3",
+    "js-md5": "^0.7.3",
+    "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.4",
+    "mysql": "^2.18.1",
+    "silly-datetime": "^0.1.2",
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0-0",
+    "wangeditor": "^4.7.13"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-router": "~4.5.13",
+    "@vue/cli-service": "~4.5.13",
+    "@vue/compiler-sfc": "^3.0.0"
+  }
+}
