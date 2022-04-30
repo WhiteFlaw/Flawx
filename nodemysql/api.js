@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 const dbConfig = require('./db');
 const sqlMap = require('./sqlMap');
-const jwt = require('jsonwebtoken');  //用来生成token
+const jwt = require('jsonwebtoken');  //生成token
 let sd = require('silly-datetime');
 let time = sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss');
 
