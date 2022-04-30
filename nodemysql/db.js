@@ -1,10 +1,10 @@
 // 数据库连接配置
 module.exports = {
     mysql: {
-      host: 'localhost',  // 新建数据库连接时的 主机名或ID地址 内容
+      host: 'localhost', 
       user: 'root', 
-      password: '123456', // root 密码
-      database: 'nodemysql', // 数据库名
+      password: '123456', 
+      database: 'nodemysql', 
       port: '3306'
     }
   }
