@@ -27,11 +27,11 @@ app.post('/setValue', (req, res, next) => {
   api.setValue(req, res, next);
 });
 
-app.get('/getLatestArticle', (req, res, next) => {   //首页文章请求
+app.get('/getLatestArticle', (req, res, next) => {   
   api.getLatestArticle(req, res, next);
 });
 
-app.get('/getHottestArticle', (req, res, next) => {   //首页文章请求
+app.get('/getHottestArticle', (req, res, next) => {  
   api.getHottestArticle(req, res, next);
 });
 
