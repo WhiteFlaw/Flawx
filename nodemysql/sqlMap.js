@@ -3,10 +3,10 @@ const { updateAvatar } = require("./api");
 var sqlMap = {
   article: {
     deleteArticleById: 'DELETE FROM article WHERE article_id = ?',
-    updateContentById: 'UPDATE article SET article_title= ?, article_content= ?, article_posttime= ? WHERE article_id= ?',  //检查update语句是否正确,因为不知道不改的项不空出来会不会出事
+    updateContentById: 'UPDATE article SET article_title= ?, article_content= ?, article_posttime= ? WHERE article_id= ?',
     updateArticleTitleById: 'UPDATE article SET article_title=? WHERE article_id = ?',
-    queryHottestArticle: 'SELECT article_content, article_id, article_title FROM article order by viewCount desc limit 10',  //前10篇最火文章, 记得添加viewCount项
-    queryLatestArticle: 'SELECT article_content, article_id, article_title FROM article order by article_id desc limit 10',  //前10篇最新文章
+    queryHottestArticle: 'SELECT article_content, article_id, article_title FROM article order by viewCount desc limit 10',
+    queryLatestArticle: 'SELECT article_content, article_id, article_title FROM article order by article_id desc limit 10', 
     queryArticleByViewCount: 'select * from article order by viewCount desc LIMIT 25',
     queryArticleById: 'SELECT * from article WHERE article_id=?',
     updateViewCount: 'UPDATE article SET viewCount=? WHERE article_id=?',
