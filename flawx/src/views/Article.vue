@@ -1,10 +1,25 @@
 <template>
   <sy-nav-bar></sy-nav-bar>
   <div class="article_body">
-    <sy-author-1
-      v-model:article_author="data.article_author"
-      v-model:authorname="data.authorname"
-    ></sy-author-1>
+    <div class="article_author">
+      <sy-author-1
+        v-model:author_avatar="data.article_author.avatar"
+        v-model:author_name="data.authorname"
+        v-model:author_downname="data.article_author.register_time"
+        v-model:author_motto="data.article_author.motto"
+      >
+        <template #author_tag>
+          <el-tag v-for="item in data.article_author.tag" :key="item">{{
+            item
+          }}</el-tag>
+        </template>
+        <template #author_else>
+          <el-button type="primary">赞同:{{ data.article_author.agree }}</el-button>
+          <el-button type="success">受访:{{ data.article_author.totalView }}</el-button>
+        </template>
+      </sy-author-1>
+    </div>
+
     <div class="article_list">
       <div>
         <p style="margin-left: 10px">{{ data.authorname }}的其他文章</p>
@@ -91,19 +106,15 @@ export default defineComponent({
     SyNavBar,
     SyAuthor1,
   },
+
   setup() {
     const $route = useRoute();
-    const $router = useRouter();
-    const textarea = ref("textarea");
     let data = reactive({
       authorname: "用户名请求失败",
       article_author: {
         motto: "motto请求失败",
         age: 1,
-        tag1: "失败",
-        tag2: "失败",
-        tag3: "失败",
-        tag4: "失败",
+        tag: [],
         agree: "?",
         register_time: "失败",
         totalView: "失败",
@@ -173,6 +184,14 @@ export default defineComponent({
             })
             .then((result) => {
               data.article_author = result.data[0];
+              data.article_author.tag = [
+                result.data[0].tag1,
+                result.data[0].tag2,
+                result.data[0].tag3,
+                result.data[0].tag4,
+              ];
+              data.article_author.register_time =
+                result.data[0].register_time.substring(0, 10) + "入驻";
               data.article_author.totalView += 1;
               data.article_data.viewCount += 1;
               axios
