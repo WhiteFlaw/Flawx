@@ -1,10 +1,19 @@
 <template>
   <sy-nav-bar></sy-nav-bar>
   <div class="allArticle_body">
-    <sy-author-2
-      v-model:article_author="data.article_author"
-      v-model:authorname="data.authorname"
-    ></sy-author-2>
+    <div class="article_author">
+      <sy-author-2
+        v-model:author_avatar="data.article_author.avatar"
+        v-model:author_name="data.authorname"
+        v-model:author_age="data.article_author.register_time"
+      >
+        <template #tag>
+          <el-tag v-for="item in data.article_author.tag" :key="item">
+            {{ item }}
+          </el-tag>
+        </template>
+      </sy-author-2>
+    </div>
     <div class="allArticle_list">
       <sy-pagination
         size="large"
@@ -40,10 +49,7 @@ export default {
       article_author: {
         motto: "motto请求失败",
         age: 1,
-        tag1: "失败",
-        tag2: "失败",
-        tag3: "失败",
-        tag4: "失败",
+        tag: [],
         agree: "?",
         register_time: "失败",
         totalView: "失败",
@@ -67,6 +73,14 @@ export default {
         })
         .then((result) => {
           data.article_author = result.data[0];
+          data.article_author.register_time =
+            "入驻于" + result.data[0].register_time.substring(0, 10);
+          data.article_author.tag = [
+            result.data[0].tag1,
+            result.data[0].tag2,
+            result.data[0].tag3,
+            result.data[0].tag4,
+          ];
         });
     };
 
@@ -125,7 +139,7 @@ export default {
 .article_author {
   position: absolute;
   top: 70px;
-  left: 25px;
+  left: 50px;
 }
 
 .allArticle_list {
