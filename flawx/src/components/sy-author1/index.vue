@@ -1,42 +1,28 @@
 <template>
-  <div class="article_author">
-    <div class="article_author_avatar">
-      <el-avatar size="large" :src="article_author.avatar" />
+  <div class="author" :style="size">
+    <div class="author_avatar">
+      <el-avatar :size="author_avatar_size" :src="author_avatar" />
     </div>
-    <div class="article_author_name">
-      <p v-text="authorname"></p>
+    <div class="author_name">
+      <p v-html="author_name"></p>
     </div>
-    <div class="article_author_age">
-      <p>{{ article_author.register_time.substring(0, 10) }}入驻</p>
-      <!-- 这里如果不事先在data.article_author里声明register_time会导致报错substring的对象不可为undefined,一开始以为要在请求完做处理再渲染,并不是这个原因. -->
+    <div class="author_downname">
+      <p v-html="author_downname"></p>
     </div>
-    <div class="article_author_motto">
-      {{ article_author.motto }}
+    <div class="author_motto">
+      <p v-html="author_motto"></p>
     </div>
-    <p class="article_author_totalView">
-      被访问:{{ article_author.totalView }}次)
-    </p>
-    <div class="article_author_tag">
-      <el-tag class="ml_2" type="success">{{ article_author.tag1 }}</el-tag>
-      <el-tag class="ml_2" type="success">{{ article_author.tag2 }}</el-tag>
-      <el-tag class="ml_2" type="warning">{{ article_author.tag3 }}</el-tag>
-      <el-tag class="ml_2" type="danger">{{ article_author.tag4 }}</el-tag>
+    <div
+      class="author_tag"
+      style="display: flex; justify-content: space-between"
+    >
+      <slot name="author_tag"></slot>
     </div>
-    <div class="article_author_action">
-      <el-button
-        type="primary"
-        round
-        size="large"
-        class="article_author_action_focus"
-        >关 注</el-button
-      >
-      <el-button
-        type="success"
-        round
-        size="large"
-        class="article_author_action_agree"
-        >认可({{ article_author.agree }})</el-button
-      >
+    <div
+      class="author_else"
+      style="display: flex; justify-content: space-around; align-items: center"
+    >
+      <slot name="author_else"></slot>
     </div>
   </div>
 </template>
@@ -45,106 +31,168 @@
 import { ref, reactive, onMounted, watch } from "vue";
 export default {
   props: {
-    authorname: {
-      type: String,
+    size: {
+      //测试完毕, 能用
+      type: [String, Number],
+      default: "large",
     },
-    article_author: {
-      type: Object,
+    author_avatar: {
+      //测试完毕,能用但是记得改一下图片默认放置位置
+      type: String,
+      default: "",
+    },
+    author_avatar_size: {
+      //测试完毕,正常
+      type: [String, Number],
+      default: "large",
+    },
+    author_name: {
+      type: String,
+      default: "unnamed",
+    },
+    author_downname: {
+      type: String,
+      default: "unknown",
+    },
+    author_motto: {
+      type: String,
+      default: "unknown",
+    },
+  },
+  computed: {
+    size() {
+      if (this.size) {
+        if (this.size == "large") {
+          return "height:290px;width:330px;";
+        } else if (this.size == "middle") {
+          return "height:290px;width:330px;transform:scale(0.8);transform-origin: 0% 25%;";
+        } else if (this.size == "mini") {
+          return "height:290px;width:330px;transform:scale(0.6);transform-origin: 0% 25%;";
+        } else {
+          return `height:290px;width:330px;transform:scale(${
+            this.size / 10
+          });transform-origin: 25% 25%;;`;
+        }
+      }
+    },
+    author_avatar_size() {
+      return this.author_avatar_size;
     },
   },
   setup(props) {
-    const authorname = ref(props.authorname);
-    const article_author = ref(props.article_author);
+    const author_avatar = ref(props.author_avatar);
+    const author_avatar_size = ref(props.author_avatar_size);
+    const author_name = ref(props.author_name);
+    const author = ref(props.author);
+
     watch(
-      () => props.authorname,
-      (newValue) => {
-        authorname.value = newValue;
+      () => props.author_avatar,
+      (newValue, oldValue) => {
+        author_avatar.value = newValue;
       }
     );
+
     watch(
-      () => props.article_author,
-      (newValue) => {
-        article_author.value = newValue;
+      () => props.author_name,
+      (newValue, oldValue) => {
+        author_name.value = newValue;
       }
     );
-    return { authorname, article_author };
+
+    return {
+      author_avatar,
+      author_avatar_size,
+      author_name,
+      author,
+    };
   },
 };
 </script>
 
 <style scoped>
-.article_author {
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.author {
   position: relative;
   top: 0px;
   left: 0px;
   border-radius: 1%;
-  background-color: #fff;
-  height: 290px;
-  width: 330px;
+  background-color: rgb(255, 255, 255);
 }
 
-.article_author_avatar {
+.author_avatar {
   position: absolute;
   top: 15px;
   left: 30px;
 }
 
-.article_author_name {
+.author_name {
   position: absolute;
-  top: 20px;
-  left: 95px;
+  top: 15px;
+  left: 100px;
+  height: 25px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 20px;
   font-size: 17px;
   letter-spacing: 1px;
+  line-height: 25px;
   color: rgb(102, 102, 102);
+  background-color: rgb(235, 235, 235);
 }
 
-.article_author_age {
+.author_downname {
   position: absolute;
-  top: 40px;
-  left: 83px;
+  top: 45px;
+  left: 90px;
+  height: 30px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 20px;
   font-size: 17px;
+  line-height: 30px;
   letter-spacing: 1px;
-  transform: scale(0.8);
   color: rgb(170, 170, 170);
+  transform: scale(0.8);
+  background-color: rgb(235, 235, 235);
 }
 
-.article_author_totalView {
+.author_motto {
   position: absolute;
-  top: 56px;
-  left: 86px;
+  top: 80px;
+  left: 33px;
+  height: 80px;
+  width: 260px;
+  padding-left: 5px;
+  border-radius: 10px;
   font-size: 17px;
-  transform: scale(0.8);
+  line-height: 30px;
+  letter-spacing: 1px;
   color: rgb(170, 170, 170);
+  background-color: rgb(235, 235, 235);
 }
 
-.article_author_motto {
+.author_tag {
   position: absolute;
-  top: 85px;
+  top: 170px;
+  left: 33px;
+  height: 30px;
+  width: 265px;
+  align-items: center;
+  border-radius: 5px;
+  background-color: rgb(235, 235, 235);
+}
+
+.author_else {
+  position: absolute;
+  top: 195px;
   left: 33px;
   height: 80px;
   width: 265px;
-  font-size: 17px;
-  letter-spacing: 1px;
-  color: rgb(170, 170, 170);
-}
-
-.article_author_tag {
-  position: absolute;
-  top: 170px;
-  left: 25px;
-}
-
-.ml_2 {
-  margin-left: 8px;
-}
-
-.article_author_action {
-  position: absolute;
-  top: 230px;
-  left: 50px;
-}
-
-.article_author_action_agree {
-  margin-left: 60px;
+  border-radius: 8px;
+  /*   background-color: rgb(235, 235, 235); */
 }
 </style>
