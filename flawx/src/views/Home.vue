@@ -40,16 +40,59 @@
         </div>
       </div>
       <div class="home_new_mid">
-        <sy-carousel
-          v-model:home_new_mid_page_news="data.home_new_mid_page_news"
-        ></sy-carousel>
+        <div class="home_new_mid_left">
+          <sy-carousel :height="405" :width="260">
+            <template #sy_carousel_content>
+              <el-carousel-item
+                v-for="(item, index) in data.home_new_mid_page_news"
+                :key="item[index].article_id"
+              >
+                <li
+                  class="awsl"
+                  v-for="info in item"
+                  :key="info.article_id"
+                  @click="toArticle(info.article_id)"
+                >
+                  <h3 style="padding: 10px 0 0 10px">
+                    {{ info.article_title.substring(0, 23) }}
+                  </h3>
+                  <p
+                    style="padding: 0 15px 0 10px"
+                    v-html="info.article_content.substring(0, 20)"
+                  ></p>
+                </li>
+              </el-carousel-item>
+            </template>
+          </sy-carousel>
+        </div>
+
+        <div class="home_new_mid_right">
+          <sy-carousel :height="405" :width="260">
+            <template #sy_carousel_content>
+              <el-carousel-item
+                v-for="(item, index) in data.home_new_mid_page_hot"
+                :key="item[index].article_id"
+              >
+                <li
+                  class="awsl"
+                  v-for="info in item"
+                  :key="info.article_id"
+                  @click="toArticle(info.article_id)"
+                >
+                  <h3 style="padding: 10px 0 0 10px">
+                    {{ info.article_title.substring(0, 23) }}
+                  </h3>
+                  <p
+                    style="padding: 0 15px 0 10px"
+                    v-html="info.article_content.substring(0, 15)"
+                  ></p>
+                </li>
+              </el-carousel-item>
+            </template>
+          </sy-carousel>
+        </div>
       </div>
       <div class="home_new_right">
-        <sy-carousel
-          v-model:home_new_mid_page_news="data.home_new_mid_page_hot"
-        ></sy-carousel>
-      </div>
-      <div class="home_adver_right">
         <el-carousel
           indicator-position="inside"
           autoplay="false"
@@ -130,7 +173,6 @@ export default {
     SyCarousel,
   },
   setup() {
-    const loading = ref(true);
     const activeNames = ref(["1"]);
     const cardShow = ref(null);
     const cardShow2 = ref(null);
@@ -151,45 +193,11 @@ export default {
       ],
       home_new_left_detail: {
         img: "https://s3.bmp.ovh/imgs/2022/04/06/6da731882a64835f.gif",
-        article_id: "", //YaBai的最新一篇文章id
+        article_id: "",
         title: "2022-4-8 | Ver0.1.2更新",
         text: "点这了解此次更新",
         alt: "home_new_left_detail",
-      }, //把这个绑定到后端，不然要天天换
-      home_new_mid_title_img: [
-        //不请求
-        {
-          url: "https://s3.bmp.ovh/imgs/2022/03/a8e2bb733453086b.png",
-          id: 1,
-          alt: "arrow_l",
-          active: true,
-          direction: "left",
-        },
-        {
-          url: "https://s3.bmp.ovh/imgs/2022/03/2a6f0982c02436a8.png",
-          id: 2,
-          alt: "arrow_r",
-          active: false,
-          direction: "right",
-        },
-      ],
-      home_new_right_title_img: [
-        //不请求
-        {
-          url: "https://s3.bmp.ovh/imgs/2022/03/a8e2bb733453086b.png",
-          id: 1,
-          alt: "arrow_l",
-          active: true,
-          direction: "left",
-        },
-        {
-          url: "https://s3.bmp.ovh/imgs/2022/03/2a6f0982c02436a8.png",
-          id: 2,
-          alt: "arrow_r",
-          active: false,
-          direction: "right",
-        },
-      ],
+      },
       home_new_mid_page_news: [],
       home_new_mid_page_hot: [],
       home_adver_right_index: [
@@ -370,37 +378,19 @@ export default {
 </script>
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+}
+
 .el-tabs {
   margin-left: 35px;
   width: 950px;
 }
 
 .el-tabs__nav {
-  /* infinite-list-nav 横向位置*/
-  margin-left: 0px;
   height: 70px;
   line-height: 70px;
-}
-
-.el-tabs__content {
-  /* infinite-list-content 横向位置*/
-  margin-left: -10px;
-}
-
-.el-page-header {
-  float: left;
-  height: 45px;
-  padding-right: 20px;
-  padding-left: 20px;
-  line-height: 45px;
-}
-
-.el-breadcrumb {
-  float: left;
-  line-height: 45px;
-  height: 45px; /* 别改这里 */
-  width: 100%;
-  background-color: #fff;
 }
 
 .el-collapse {
@@ -408,8 +398,19 @@ export default {
   top: 45px;
 }
 
+.el-carousel p {
+  font-size: 14px;
+  transform: scale(0.8);
+  transform-origin: left top;
+}
+
+.awsl {
+  height: 25%;
+  background-color: rgb(229, 229, 229);
+  border-radius: 3px;
+}
+
 .el-collapse-item__header {
-  margin-left: 0;
   line-height: 45px;
   text-align: center;
   display: block;
@@ -427,42 +428,6 @@ export default {
   background-color: rgb(241, 241, 241);
 }
 
-.infinite-list {
-  height: 500px;
-  padding: 10px;
-  margin: 0;
-  list-style: none;
-}
-
-.infinite-list .infinite-list-item {
-  padding: 5px;
-  margin: 5px;
-  border-radius: 1%;
-  height: 140px;
-  border-bottom: 2px solid #000;
-  background-color: #fff;
-  border: 0.5px solid rgb(192, 191, 191);
-}
-
-.infinite-list .infinite-list-item:hover {
-  background-color: rgb(247, 246, 246);
-}
-
-.el-carousel__item {
-  background-color: #fff;
-}
-
-.el-carousel__item li {
-  height: 24%;
-}
-
-.home_nav_detail {
-  float: left;
-  list-style-type: none;
-  margin: 24px;
-  color: rgb(102, 102, 102);
-}
-
 .home_new {
   position: relative;
   top: 110px;
@@ -472,13 +437,12 @@ export default {
   border-radius: 1%;
 }
 
+.home_new_left_title p,
 .home_new_left_title img {
+  padding-top: 10px;
   float: left;
-  margin-top: 12px;
-}
-
-.home_new_left_title p {
-  padding: 10px;
+  font-size: 15px;
+  color: rgb(91, 91, 91);
 }
 
 .home_new_left_detail {
@@ -487,8 +451,6 @@ export default {
   left: 0px;
   height: 230px;
   width: 420px;
-  border-radius: 1%;
-  border: 0.5px solid rgb(192, 191, 191);
 }
 
 .home_new_left_detail h2 {
@@ -506,33 +468,33 @@ export default {
 
 .home_new_mid {
   position: absolute;
-  top: 0;
-  left: 445px;
-  height: 435px;
-  width: 255px;
+  top: 0px;
+  left: 450px;
+  width: 555px;
+  height: 410px;
   color: rgba(34, 33, 33, 0.705);
   list-style-type: none;
+}
+
+.home_new_mid_left {
+  position: absolute;
+  top: 0;
+}
+
+.home_new_mid_right {
+  position: absolute;
+  top: 0;
+  left: 295px;
 }
 
 .home_new_right {
   position: absolute;
   top: 0;
-  left: 750px;
-  height: 435px;
-  width: 255px;
-  color: rgba(34, 33, 33, 0.705);
-  list-style-type: none;
-}
-
-.home_adver_right {
-  position: absolute;
-  top: 0;
   left: 1040px;
-  height: 405px;
   width: 340px;
-  border-radius: 1%;
+  border-radius: 3px;
   overflow: hidden;
-  border: 0.5px solid rgb(192, 191, 191);
+  list-style-type: none;
 }
 
 .home_articleList {
@@ -563,5 +525,26 @@ export default {
   height: 100%;
   padding-top: 30px;
   padding-left: 30px;
+}
+
+.infinite-list {
+  height: 500px;
+  padding: 10px;
+  margin: 0;
+  list-style: none;
+}
+
+.infinite-list .infinite-list-item {
+  padding: 5px;
+  margin: 5px;
+  border-radius: 1%;
+  height: 140px;
+  border-bottom: 2px solid #000;
+  background-color: #fff;
+  border: 0.5px solid rgb(192, 191, 191);
+}
+
+.infinite-list .infinite-list-item:hover {
+  background-color: rgb(247, 246, 246);
 }
 </style>
