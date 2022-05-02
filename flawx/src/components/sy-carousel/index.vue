@@ -1,46 +1,39 @@
+<!--横向尺寸, 纵向尺寸, 内容, 箭头位置(v-if-else) -->
 <template>
-  <li class="home_new_mid_title" style="list-style-type: none">
-    <img
-      :src="item.url"
-      :alt="item.alt"
-      v-for="item in data.home_new_mid_title_img"
-      :key="item.id"
-      @click="arrowClick(item.direction)"
-    />
-  </li>
   <div
-    class="home_new_mid_carousel"
-    v-loading="data.countTime"
-    element-loading-background="rgb(241, 241, 241)"
-    element-loading-text="Loading..."
+    class="sy_carousel"
+    :style="[size.sy_carousel_height, size.sy_carousel_width]"
   >
-    <el-carousel
-      indicator-position="none"
-      :autoplay="true"
-      height="360px"
-      arrow="never"
-      ref="cardShow"
+    <!-- 这里直接返回宽高 -->
+    <li class="sy_carousel_title" style="list-style-type: none">
+      <img
+        :src="item.url"
+        :alt="item.alt"
+        v-for="item in data.sy_carousel_title_img"
+        :key="item.id"
+        @click="arrowClick(item.direction)"
+      />
+    </li>
+    <div
+      class="sy_carousel_loading"
+      v-loading="data.countTime"
+      element-loading-background="rgb(241, 241, 241)"
+      element-loading-text="Loading..."
     >
-      <!-- 我不理解为什么这个B地方V加了data就undefined了但是不报错 -->
-      <el-carousel-item
-        v-for="(item, index) in home_new_mid_page_news"
-        :key="item[index].article_id"
+      <!-- 这里style应该显示被缩小化的宽,height传入被处理过的高 -->
+      <el-carousel
+        :style="size.el_carousel_width"
+        indicator-position="inside"
+        :autoplay="true"
+        :interval="5000"
+        :height="size.el_carousel_height"
+        arrow="never"
+        ref="cardShow"
       >
-        <li
-          v-for="info in item"
-          :key="info.article_id"
-          @click="toArticle(info.article_id)"
-        >
-          <h3 style="padding: 15px 0 0 10px">
-            {{ info.article_title.substring(0, 23) }}
-          </h3>
-          <p
-            style="padding: 0 15px 0 10px"
-            v-html="info.article_content.substring(0, 15)"
-          ></p>
-        </li>
-      </el-carousel-item>
-    </el-carousel>
+        <slot name="sy_carousel_content"></slot>
+        <!-- 我不理解为什么这个B地方V加了data就undefined了但是不报错 -->
+      </el-carousel>
+    </div>
   </div>
 </template>
 
@@ -50,18 +43,36 @@ import { useRouter } from "vue-router";
 
 export default {
   props: {
-    home_new_mid_page_news: {
-      type: Array,
+    height: {
+      type: [String, Number],
+      default: "",
+    },
+    width: {
+      type: [String, Number],
+      default: "",
+    },
+  },
+  computed: {
+    size() {
+      let sy_carousel_width = `width: ${this.width}px`;
+      let sy_carousel_height = `height: ${this.height}px`;
+      let el_carousel_width = `width: ${this.width}px`;
+      let el_carousel_height = `${this.height * 0.89}px`;
+      return {
+        sy_carousel_width,
+        sy_carousel_height,
+        el_carousel_width,
+        el_carousel_height,
+      };
     },
   },
   setup(props) {
+    const router = useRouter();
     const cardShow = ref(null);
     const cardShow2 = ref(null);
-    const count = ref(0);
-    const router = useRouter();
-    const home_new_mid_page_news = ref(props.home_new_mid_page_news);
+
     let data = reactive({
-      home_new_mid_title_img: [
+      sy_carousel_title_img: [
         //不请求
         {
           url: "https://s3.bmp.ovh/imgs/2022/03/a8e2bb733453086b.png",
@@ -81,17 +92,10 @@ export default {
       countTime: 3,
       load: true,
     });
+
     onMounted(() => {
       xxx();
     });
-
-    watch(
-      () => props.home_new_mid_page_news,
-      (newValue) => {
-        home_new_mid_page_news.value = newValue;
-        console.log(home_new_mid_page_news.value);
-      }
-    );
 
     const xxx = () => {
       data.countTime -= 1;
@@ -134,10 +138,9 @@ export default {
     };
 
     return {
+      data,
       cardShow,
       cardShow2,
-      data,
-      home_new_mid_page_news,
       arrowClick,
       arrowClick2,
       toArticle,
@@ -147,45 +150,29 @@ export default {
 </script>
 
 <style scoped>
-.home_new_mid {
+.sy_carousel {
   position: absolute;
   top: 0;
-  left: 445px;
-  height: 435px;
-  width: 255px;
+  left: 0px;
   color: rgba(34, 33, 33, 0.705);
 }
 
-.home_new_mid_title {
+.sy_carousel_title {
   position: absolute;
-  top: 5px;
-  left: 220px;
+  top: 15px;
+  right: 0px;
 }
 
-.home_new_mid_carousel li {
-  margin: 2px;
-  background-color: rgb(255, 255, 255);
-  border-radius: 5px;
-  height: 24%;
-}
-
-.home_new_mid_carousel li:hover {
-  background-color: rgb(247, 246, 246);
-}
-
-.home_new_mid_title img {
+.sy_carousel_title img {
   height: 23px;
   padding: 3px;
 }
 
-.home_new_mid_carousel {
+.sy_carousel_loading {
   position: absolute;
   top: 45px;
-  height: 360px;
-  width: 250px;
   border-radius: 1%;
   overflow: hidden;
   border: 1px solid rgb(192, 191, 191);
-  list-style-type: none;
 }
 </style>
