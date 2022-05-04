@@ -114,7 +114,27 @@
       </div>
     </div>
     <div class="home_articleList">
-      <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+      <sy-tabs :sy_tab_data="data.home_article_type">
+        <template v-slot="slotProps">
+          <ul
+            v-infinite-scroll="load"
+            class="infinite-list"
+            style="overflow: auto"
+          >
+            <!-- 这里父组件要用子组件的数据item.id,考虑一下作用域插槽 -->
+            <li
+              v-for="i in data.home_article_content[slotProps.item.id]"
+              :key="i"
+              class="infinite-list-item"
+              @click="toArticle(i.article_id)"
+            >
+              <h3>{{ i.article_title }}</h3>
+              <p v-html="i.article_content.substring(0, 30)"></p>
+            </li>
+          </ul>
+        </template>
+      </sy-tabs>
+      <!--       <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
         <el-tab-pane
           v-for="item in data.home_article_type"
           :label="item.label"
@@ -137,7 +157,7 @@
             </li>
           </ul>
         </el-tab-pane>
-      </el-tabs>
+      </el-tabs> -->
     </div>
     <div class="home_timeList">
       <el-timeline class="home_timeList_detail">
@@ -165,12 +185,14 @@ import { useRouter } from "vue-router";
 import { MoreFilled } from "@element-plus/icons-vue";
 import SyNavBar from "../components/sy-navbar";
 import SyCarousel from "../components/sy-carousel";
+import SyTabs from "../components/sy-tabs";
 
 export default {
   name: "Home",
   components: {
     SyNavBar,
     SyCarousel,
+    SyTabs
   },
   setup() {
     const activeNames = ref(["1"]);
