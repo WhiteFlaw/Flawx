@@ -9,7 +9,7 @@
         :data="tree"
         :props="defaultProps"
         @node-click="handleNodeClick"
-        default-expand-all="true"
+        :default-expand-all="true"
       /><!-- 绑定的方法还是不要加括号了,真的会导致传不过去值之类的错误,至少现在在element里发现了这个错误,这里的handleNodeClick加括号获取不到点击的节点信息; -->
     </div>
     <ul class="user_articledata">
@@ -29,6 +29,7 @@
       size="middle"
       v-model:user_article_content_page="data.user_article_content_page"
       v-model:newArr="data.newArr"
+      @deleteArticle="deleteArticle"
     ></sy-pagination>
   </div>
 </template>
@@ -38,6 +39,7 @@ import { toRefs, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import SyNavBar from "../components/sy-navbar";
+import { toRaw } from "vue";
 import SyPagination from "../components/sy-pagination";
 
 import axios from "axios";
@@ -94,10 +96,10 @@ export default {
         { articledata_title: "受收藏", articledata_data: "fail" },
         { articledata_title: "受关注", articledata_data: "fail" },
       ],
-      newArr: "",
+      allArticle: [],
+      newArr: [],
       currentPage: 1,
-      user_article_content: "",
-      user_article_content_page: "",
+      user_article_content_page: 0, //页数
     });
 
     onMounted(() => {
@@ -126,36 +128,19 @@ export default {
           username: localStorage.getItem("username"),
         })
         .then((res) => {
-          function spArr(arr, num) {
-            //arr是你要分割的数组，num是以几个为一组
-            let newArr = []; //首先创建一个新的空数组。用来存放分割好的数组
-            for (let i = 0; i < arr.length; ) {
-              //注意：这里与for循环不太一样的是，没有i++
-              newArr.push(arr.slice(i, (i += num)));
-            }
-            data.newArr = newArr;
-            data.user_article_content_page = newArr.length;
-            return newArr;
-          }
-          let arr = res.data;
-          spArr(arr, 5);
+          data.allArticle = res.data;
+          dataProcessing(data.allArticle, 5);
         });
     };
 
-    const currentChange = () => {
-      data.user_article_content = data.newArr[data.currentPage - 1];
-      console.log(data.currentPage);
-    };
-
-    const prevClick = () => {
-      data.currentPage - 1;
-      data.user_article_content = data.newArr[data.currentPage - 1];
-      console.log(data.currentPage);
-    };
-
-    const nextClick = () => {
-      data.currentPage + 1;
-      data.user_article_content = data.newArr[data.currentPage - 1];
+    const dataProcessing = (arr, num) => {
+      let newArr = [];
+      for (let i = 0; i < arr.length; ) {
+        newArr.push(arr.slice(i, (i += num)));
+      }
+      data.newArr = newArr;
+      data.user_article_content_page = newArr.length;
+      return newArr;
     };
 
     const handleNodeClick = (data) => {
@@ -166,26 +151,38 @@ export default {
       window.location.href = "#/user/publish";
     };
 
-    const goBack = () => {
-      router.go(-1);
+    const deleteArticle = (item) => {
+      //console.log(toRaw(data.allArticle)); //不管是不是toRaw都是数组类型, 也许数据外面的proxy会默认忽略掉
+      //console.log(Array.isArray(toRaw(data.allArticle)));
+      //从allArticle中筛选与item不同的项生成新数组temArr赋值给data.allArticle, 然后调用dataProcessing传入新的data.allAticle数组
+      let temArr = data.allArticle.slice(0);
+      for (let i = temArr.length; i >= 0; i--) {
+        if (temArr[i] === item) {
+          temArr.splice(i, 1);
+        }
+      }
+      data.allArticle = temArr;
+      dataProcessing(data.allArticle, 5);
+      axios
+        .post("http://101.200.171.66:3000/user/delArticle", {
+          article_id: item.article_id,
+        })
+        .then((res) => {
+          if (res.data.status == true) {
+            ElMessage.success(res.data.msg);
+          } else {
+            ElMessage.error(res.data.msg);
+          }
+        });
     };
 
-    const logOut = () => {
-      window.location.href = "#/login";
-      localStorage.clear();
-    };
     return {
       data,
-      ...toRefs(data),
       handleNodeClick,
-      logOut,
       publish,
-      goBack,
       tree,
       defaultProps,
-      currentChange,
-      prevClick,
-      nextClick,
+      deleteArticle,
     };
   },
 };
