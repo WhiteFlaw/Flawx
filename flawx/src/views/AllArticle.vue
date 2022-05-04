@@ -55,9 +55,9 @@ export default {
         totalView: "失败",
         avatar: "",
       },
+      allArticle: [],
       currentPage: 1,
       user_article_content_page: 1,
-      user_article_content: [{ article_title: "loading...", article_id: "" }],
     });
 
     onMounted(() => {
@@ -90,31 +90,41 @@ export default {
           username: localStorage.getItem("username"),
         })
         .then((res) => {
-          function spArr(arr, num) {
-            //arr是你要分割的数组，num是以几个为一组
-            let newArr = []; //首先创建一个新的空数组。用来存放分割好的数组
-            for (let i = 0; i < arr.length; ) {
-              //注意：这里与for循环不太一样的是，没有i++
-              newArr.push(arr.slice(i, (i += num)));
-            }
-            data.newArr = newArr;
-            data.user_article_content_page = newArr.length;
-            return newArr;
-          }
-          let arr = res.data;
-          spArr(arr, 8);
+          data.allArticle = res.data;
+          dataProcessing(data.allArticle, 5);
         });
     };
 
-    const deleteArticle = (id) => {
+    const dataProcessing = (arr, num) => {
+      let newArr = [];
+      for (let i = 0; i < arr.length; ) {
+        newArr.push(arr.slice(i, (i += num)));
+      }
+      data.newArr = newArr;
+      data.user_article_content_page = newArr.length;
+      return newArr;
+    };
+
+    const deleteArticle = (item) => {
       //console.log(id);
+      let temArr = data.allArticle.slice(0);
+      for (let i = temArr.length; i >= 0; i--) {
+        if (temArr[i] === item) {
+          temArr.splice(i, 1);
+        }
+      }
+      data.allArticle = temArr;
+      dataProcessing(data.allArticle, 5);
       axios
-        .post("http://101.200.171.66:3000/user/delArticle", { article_id: id })
-        .then((result) => {
-          if (result.status == true) {
-            ElMessage.success(result.data.msg);
+        .post("http://101.200.171.66:3000/user/delArticle", {
+          article_id: item.article_id,
+        })
+        .then((res) => {
+          console.log(res.data)
+          if (res.data.status == true) {
+            ElMessage.success(res.data.msg);
           } else {
-            ElMessage.error(result.data.msg);
+            ElMessage.error(res.data.msg);
           }
         });
     };
