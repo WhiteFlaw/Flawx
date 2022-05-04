@@ -7,15 +7,19 @@
         :key="item"
         style="text-decoration: none; color: #000"
       >
-        <p @click="toArticle('/article?id=' + item.article_id)">
+        <p
+          @click="toArticle('/article?id=' + item.article_id)"
+          style="float: left"
+        >
           {{ item.article_title }}
         </p>
         <span
-          style="position: absolute; right: 70px; color: red"
-          @click="deleteArticle(item.article_id)"
+          style="position: absolute; right: 70px; color: red; padding: 2px"
+          @click="deleteArticle(item)"
           >删除</span
         >
-        <span style="position: absolute; right: 140px; color: #409eff;"
+        <span
+          style="position: absolute; right: 140px; color: #409eff; padding: 2px"
           >编辑</span
         >
       </li>
@@ -41,6 +45,7 @@ export default {
   props: {
     newArr: {
       type: Array,
+      default:[]
     },
     user_article_content_page: {
       type: Number,
@@ -74,7 +79,6 @@ export default {
         () => props.newArr,
         (newValue, oldValue) => {
           newArr.value = newValue;
-          //console.log(newArr.value);
         }
       );
 
@@ -84,13 +88,6 @@ export default {
       (newValue, oldValue) => {
         user_article_content_page.value = newValue;
         //console.log(user_article_content_page.value);
-      }
-    );
-
-    watch(
-      () => data.user_article_content,
-      (newValue, oldValue) => {
-        data.user_article_content = newValue;
       }
     );
 
@@ -114,8 +111,8 @@ export default {
       router.push(params);
     };
 
-    const deleteArticle = (id) => {
-      emit("deleteArticle", id); //在这里成功传出id之后,父组件接收不需要传进去参数,直接调用函数,不用写形参,直接函数内输出id就可以拿到
+    const deleteArticle = (item) => {
+      emit("deleteArticle", item); //在这里成功传出id之后,父组件接收不需要传进去参数,直接调用函数,不用写形参,直接函数内输出id就可以拿到
     };
 
     return {
@@ -171,7 +168,7 @@ export default {
 }
 
 .sy-pagination_article {
-  border-radius: 2px;
+  border-radius: 5px;
   overflow: hidden;
   padding: 20px;
   border-bottom: 0.5px solid rgb(192, 191, 191);
@@ -180,6 +177,12 @@ export default {
 
 .sy-pagination_article:hover {
   background-color: rgb(248, 248, 248);
+  border-bottom: 0.5px solid rgb(192, 191, 191);
+}
+
+.sy-pagination_article span:nth-child(2):hover {
+  border-radius: 5px;
+  background-color: rgb(243, 200, 200);
   border-bottom: 0.5px solid rgb(192, 191, 191);
 }
 </style>
