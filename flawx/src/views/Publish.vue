@@ -1,7 +1,9 @@
 <template>
   <sy-nav-bar></sy-nav-bar>
   <div class="publish_body">
-    <p style="color:pink; padding-top:60px;padding-left:150px;">att: 这个模块现在不支持保存,在你退出本页面后, 所有写下的内容将会清空.</p>
+    <p style="color: pink; padding-top: 60px; padding-left: 150px">
+      att: 这个模块现在不支持保存,在你退出本页面后, 所有写下的内容将会清空.
+    </p>
     <div class="publish_title">
       <el-input
         type="text"
@@ -12,7 +14,11 @@
     <div class="publish_content">
       <div class="editor" name="editor" id="editor" ref="editor"></div>
     </div>
-    <el-button @click="publish_submitArticle" style="padding:20px; margin-left:10px;">发表文章</el-button>
+    <el-button
+      @click="publish_submitArticle"
+      style="padding: 20px; margin-left: 10px"
+      >发表文章</el-button
+    >
   </div>
 </template>
 
@@ -41,14 +47,13 @@ export default {
       editor.config.customAlert = (err) => {
         console.log(err);
       };
-      
+
       editor.customConfig = editor.customConfig
         ? editor.customConfig
         : editor.config;
 
       editor.customConfig.onchange = (html) => {
         data.editorContent = html;
-        console.log(html);
       };
 
       var menuItem = [
@@ -112,7 +117,9 @@ export default {
       } else if (!localStorage.getItem("username")) {
         ElMessage.error("请检查登陆状况.");
       } else if (!data.article_title.length >= 3) {
-        ElMessage.warning("文章题目至少3字.");
+        ElMessage.warning("标题至少3字符,太短啦.");
+      } else if (data.article_title.length >= 20) {
+        ElMessage.warning("标题至多20字符, 太长啦.");
       } else {
         ElMessage.error(
           "这怎么能叫文章啊, 至少要够20字吧?!" + data.article_title.length
