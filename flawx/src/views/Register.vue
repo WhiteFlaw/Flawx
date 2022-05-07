@@ -38,6 +38,8 @@
 
 <script>
 import axios from "axios";
+//axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = "http://8.130.48.246:3000";
 import { ElMessage } from "element-plus";
 import { reactive, ref } from "vue";
 import md5 from "js-md5";
@@ -96,14 +98,14 @@ export default {
         register_form.value.validate(async (valid) => {
           if (valid) {
             axios
-              .post("http://101.200.171.66:3000/doRegister", {
+              .post("/doRegister", {
                 username: data.ruleForm.username,
                 password: md5(data.ruleForm.password),
               })
               .then((res) => {
                 if (res.data.status == true) {
                   axios
-                    .post("http://101.200.171.66:3000/doLogin", {
+                    .post("/doLogin", {
                       username: data.ruleForm.username,
                       password: md5(data.ruleForm.password),
                     })

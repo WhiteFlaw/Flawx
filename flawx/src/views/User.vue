@@ -35,14 +35,15 @@
 </template>
 
 <script>
+import axios from 'axios';
+//axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = "http://8.130.48.246:3000";
 import { toRefs, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import SyNavBar from "../components/sy-navbar";
-import { toRaw } from "vue";
 import SyPagination from "../components/sy-pagination";
 
-import axios from "axios";
 export default {
   name: "User",
   components: {
@@ -112,7 +113,7 @@ export default {
 
     const getUserData = () => {
       axios
-        .post("http://101.200.171.66:3000/getUserData", {
+        .post("/getUserData", {
           username: localStorage.getItem("username"),
         })
         .then((res) => {
@@ -124,7 +125,7 @@ export default {
 
     const getUserArticle = () => {
       axios
-        .post("http://101.200.171.66:3000/getUserArticle", {
+        .post("/getUserArticle", {
           username: localStorage.getItem("username"),
         })
         .then((res) => {
@@ -164,7 +165,7 @@ export default {
       data.allArticle = temArr;
       dataProcessing(data.allArticle, 5);
       axios
-        .post("http://101.200.171.66:3000/user/delArticle", {
+        .post("/user/delArticle", {
           article_id: item.article_id,
         })
         .then((res) => {

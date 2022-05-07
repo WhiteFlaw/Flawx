@@ -24,6 +24,8 @@
 
 <script>
 import axios from "axios";
+//axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = "http://8.130.48.246:3000";
 import { onMounted, ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
 import EWangEditor from "wangeditor";
@@ -101,7 +103,7 @@ export default {
         data.article_title.length >= 3
       ) {
         axios
-          .post("http://101.200.171.66:3000/admin/uploadArticle", {
+          .post("/admin/uploadArticle", {
             article_title: data.article_title,
             article_authorname: localStorage.getItem("username"),
             article_content: data.editorContent,

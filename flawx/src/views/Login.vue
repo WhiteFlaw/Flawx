@@ -140,6 +140,8 @@
 
 <script>
 import axios from "axios";
+//axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = "http://8.130.48.246:3000";
 import md5 from "js-md5";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
@@ -261,7 +263,7 @@ export default {
         loginForm_mima.value.validate(async (valid) => {
           if (valid) {
             axios
-              .post("http://101.200.171.66:3000/doLogin", {
+              .post("/doLogin", {
                 username: data.ruleForm.username,
                 password: md5(data.ruleForm.password),
               })

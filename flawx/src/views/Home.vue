@@ -180,6 +180,8 @@
 
 <script>
 import axios from "axios";
+//axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = "http://8.130.48.246:3000";
 import { onMounted, ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { MoreFilled } from "@element-plus/icons-vue";
@@ -192,7 +194,7 @@ export default {
   components: {
     SyNavBar,
     SyCarousel,
-    SyTabs
+    SyTabs,
   },
   setup() {
     const activeNames = ref(["1"]);
@@ -316,7 +318,7 @@ export default {
     };
     let interval = setInterval(xxx, 1000);
     function getChangelog() {
-      axios.post("http://101.200.171.66:3000/getChangelog").then((res) => {
+      axios.post("/getChangelog").then((res) => {
         //console.log(res.data[0].article_id);
         data.home_new_left_detail.article_id = res.data[0].article_id;
         data.home_new_left_detail.title = res.data[0].article_title;
@@ -366,7 +368,7 @@ export default {
     };
 
     function getLatestArticle() {
-      axios.get("http://101.200.171.66:3000/getLatestArticle").then((res) => {
+      axios.get("/getLatestArticle").then((res) => {
         data.home_new_mid_page_news.push(
           [res.data[0], res.data[1], res.data[2], res.data[3]],
           [res.data[4], res.data[5], res.data[6], res.data[7]]
@@ -376,7 +378,7 @@ export default {
     }
 
     function getHottestArticle() {
-      axios.get("http://101.200.171.66:3000/getHottestArticle").then((res) => {
+      axios.get("/getHottestArticle").then((res) => {
         data.home_article_content[1] = res.data;
         data.home_new_mid_page_hot.push(
           [res.data[0], res.data[1], res.data[2], res.data[3]],
@@ -384,6 +386,17 @@ export default {
         );
       });
     }
+
+    const dataProcessing = (arr, num) => {
+      let newArr = [];
+      for (let i = 0; i < arr.length; ) {
+        newArr.push(arr.slice(i, (i += num)));
+      }
+      data.newArr = newArr;
+      data.user_article_content_page = newArr.length;
+      return newArr;
+    };
+
     return {
       data,
       load,
@@ -394,6 +407,7 @@ export default {
       arrowClick2,
       cardShow,
       cardShow2,
+      dataProcessing
     };
   },
 };

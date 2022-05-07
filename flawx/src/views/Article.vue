@@ -93,6 +93,8 @@
 
 <script>
 import axios from "axios";
+//axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = "http://8.130.48.246:3000";
 import { reactive, ref, onMounted } from "vue";
 import { defineComponent } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -147,7 +149,7 @@ export default defineComponent({
       if (localStorage.getItem("username")) {
         const username = localStorage.getItem("username");
         axios
-          .post("http://101.200.171.66:3000/admin/insertComments", {
+          .post("/admin/insertComments", {
             comment_name: username,
             comment_content: textarea, //不需要.value;
             comment_avatar: localStorage.getItem("avatar"),
@@ -171,7 +173,7 @@ export default defineComponent({
 
     function article_article_get() {
       axios
-        .post("http://101.200.171.66:3000/getArticleById", {
+        .post("/getArticleById", {
           article_id: $route.query.id,
         })
         .then((res) => {
@@ -179,7 +181,7 @@ export default defineComponent({
           data.article_data = res.data[0];
           data.authorname = res.data[0].article_authorname;
           axios
-            .post("http://101.200.171.66:3000/getUserData", {
+            .post("/getUserData", {
               username: res.data[0].article_authorname,
             })
             .then((result) => {
@@ -195,7 +197,7 @@ export default defineComponent({
               data.article_author.totalView += 1;
               data.article_data.viewCount += 1;
               axios
-                .post("http://101.200.171.66:3000/updateViewCount", {
+                .post("/updateViewCount", {
                   viewCount: data.article_data.viewCount, //后面要把阅读量放到data.article_view里
                   totalView: data.article_author.totalView,
                   article_id: $route.query.id,
@@ -208,7 +210,7 @@ export default defineComponent({
                     ElMessage.error(res.data.msg);
                   }
                   axios
-                    .post("http://101.200.171.66:3000/get5UserArticle", {
+                    .post("/get5UserArticle", {
                       username: data.authorname,
                     })
                     .then((result) => {
@@ -222,7 +224,7 @@ export default defineComponent({
     function article_comments_get() {
       const id = $route.query.id;
       axios
-        .post("http://101.200.171.66:3000/getComments", {
+        .post("/getComments", {
           article_id: id,
         })
         .then((res) => {
@@ -232,7 +234,7 @@ export default defineComponent({
 
     const toAnotherArticle = (id) => {
       axios
-        .post("http://101.200.171.66:3000/getArticleById", {
+        .post("/getArticleById", {
           article_id: id,
         })
         .then((res) => {
@@ -247,7 +249,7 @@ export default defineComponent({
 
       const id = $route.query.id;
       axios
-        .post("http://101.200.171.66:3000/updateAgree", {
+        .post("/updateAgree", {
           article_id: id,
           article_agree: data.article_data.article_agree,
           agree: data.article_author.agree,

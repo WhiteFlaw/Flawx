@@ -27,6 +27,8 @@
 
 <script>
 import axios from "axios";
+//axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = "http://8.130.48.246:3000";
 import { ref, reactive, onMounted } from "vue";
 import SyAuthor2 from "../components/sy-author2";
 import SyPagination from "../components/sy-pagination";
@@ -68,7 +70,7 @@ export default {
     const getUserData = () => {
       data.authorname = localStorage.getItem("username");
       axios
-        .post("http://101.200.171.66:3000/getUserData", {
+        .post("/getUserData", {
           username: data.authorname,
         })
         .then((result) => {
@@ -86,7 +88,7 @@ export default {
 
     const getUserArticle = () => {
       axios
-        .post("http://101.200.171.66:3000/getUserArticle", {
+        .post("/getUserArticle", {
           username: localStorage.getItem("username"),
         })
         .then((res) => {
@@ -116,7 +118,7 @@ export default {
       data.allArticle = temArr;
       dataProcessing(data.allArticle, 5);
       axios
-        .post("http://101.200.171.66:3000/user/delArticle", {
+        .post("/user/delArticle", {
           article_id: item.article_id,
         })
         .then((res) => {
