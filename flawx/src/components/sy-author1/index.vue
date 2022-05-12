@@ -1,7 +1,7 @@
 <template>
   <div class="author" :style="size">
     <div class="author_avatar">
-      <el-avatar :size="author_avatar_size" :src="author_avatar" />
+      <el-avatar :size="author_avatarsize" :src="author_avatar" />
     </div>
     <div class="author_name">
       <p v-html="author_name"></p>
@@ -27,86 +27,71 @@
   </div>
 </template>
 
-<script>
-import { ref, reactive, onMounted, watch } from "vue";
-export default {
-  props: {
-    size: {
-      //测试完毕, 能用
-      type: [String, Number],
-      default: "large",
-    },
-    author_avatar: {
-      //测试完毕,能用但是记得改一下图片默认放置位置
-      type: String,
-      default: "",
-    },
-    author_avatar_size: {
-      //测试完毕,正常
-      type: [String, Number],
-      default: "large",
-    },
-    author_name: {
-      type: String,
-      default: "unnamed",
-    },
-    author_downname: {
-      type: String,
-      default: "unknown",
-    },
-    author_motto: {
-      type: String,
-      default: "unknown",
-    },
-  },
-  computed: {
-    size() {
-      if (this.size) {
-        if (this.size == "large") {
-          return "height:290px;width:330px;";
-        } else if (this.size == "middle") {
-          return "height:290px;width:330px;transform:scale(0.8);transform-origin: 0% 25%;";
-        } else if (this.size == "mini") {
-          return "height:290px;width:330px;transform:scale(0.6);transform-origin: 0% 25%;";
-        } else {
-          return `height:290px;width:330px;transform:scale(${
-            this.size / 10
-          });transform-origin: 25% 25%;;`;
-        }
-      }
-    },
-    author_avatar_size() {
-      return this.author_avatar_size;
-    },
-  },
-  setup(props) {
-    const author_avatar = ref(props.author_avatar);
-    const author_avatar_size = ref(props.author_avatar_size);
-    const author_name = ref(props.author_name);
-    const author = ref(props.author);
+<script setup>
+import { ref, reactive, onMounted, watchEffect, computed, watch } from "vue";
 
-    watch(
-      () => props.author_avatar,
-      (newValue, oldValue) => {
-        author_avatar.value = newValue;
-      }
-    );
-
-    watch(
-      () => props.author_name,
-      (newValue, oldValue) => {
-        author_name.value = newValue;
-      }
-    );
-
-    return {
-      author_avatar,
-      author_avatar_size,
-      author_name,
-      author,
-    };
+const props = defineProps({
+  size: {
+    //测试完毕, 能用
+    type: [String, Number],
+    default: "large",
   },
-};
+  author_avatar: {
+    //测试完毕,能用但是记得改一下图片默认放置位置
+    type: String,
+    default: "",
+  },
+  author_avatar_size: {
+    //测试完毕,正常
+    type: [String, Number],
+    default: "large",
+  },
+  author_name: {
+    type: String,
+    default: "unnamed",
+  },
+  author_downname: {
+    type: String,
+    default: "unknown",
+  },
+  author_motto: {
+    type: String,
+    default: "unknown",
+  },
+});
+
+const size = computed(() => {
+  if (props.size) {
+    if (props.size == "large") {
+      return "height:290px;width:330px;";
+    } else if (props.size == "middle") {
+      return "height:290px;width:330px;transform:scale(0.8);transform-origin: 0% 25%;";
+    } else if (props.size == "mini") {
+      return "height:290px;width:330px;transform:scale(0.6);transform-origin: 0% 25%;";
+    } else {
+      return `height:290px;width:330px;transform:scale(${
+        props.size / 10
+      });transform-origin: 25% 25%;;`;
+    }
+  }
+});
+
+const author_avatarsize = computed(() => {
+  return props.author_avatar_size;
+});
+
+const author_avatar = ref(props.author_avatar);
+const author_avatar_size = ref(props.author_avatar_size);
+const author_name = ref(props.author_name);
+const author = ref(props.author);
+
+watchEffect(() => {
+  author_avatar.value = props.author_avatar;
+});
+
+watchEffect(() => {
+  author_name.value = props.author_name;
+});
 </script>
 
 <style scoped>
@@ -117,10 +102,11 @@ export default {
 
 .author {
   position: relative;
+  margin: 2px;
   top: 0px;
   left: 0px;
   border-radius: 1%;
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(218, 218, 218);
 }
 
 .author_avatar {
