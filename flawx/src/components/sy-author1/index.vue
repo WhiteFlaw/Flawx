@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watchEffect, computed, watch } from "vue";
+import { ref, watchEffect, computed } from "vue";
 
 const props = defineProps({
   size: {
