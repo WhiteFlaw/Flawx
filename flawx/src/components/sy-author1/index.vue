@@ -32,7 +32,6 @@ import { ref, reactive, onMounted, watchEffect, computed, watch } from "vue";
 
 const props = defineProps({
   size: {
-    //测试完毕, 能用
     type: [String, Number],
     default: "large",
   },
