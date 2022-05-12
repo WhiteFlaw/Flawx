@@ -42,8 +42,8 @@ import {
   onUpdated,
   ref,
   reactive,
-  defineProps,
-  defineEmits,
+  //defineProps,  defineProps不再需要引入
+  //defineEmits, defineEmits不再需要引入
   watchEffect,
 } from "vue";
 import { useRouter } from "vue-router";
