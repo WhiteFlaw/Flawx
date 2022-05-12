@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref, watchEffect, defineProps } from "vue";
+import { ref, watchEffect } from "vue"; //defineProps不再需要引入
 
 const props = defineProps({
   author_avatar: {
