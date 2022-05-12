@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, defineProps, computed } from "vue";
+import { reactive, ref, onMounted, computed } from "vue";  //defineProps不再需要引入
 import { useRouter } from "vue-router";
 
 const props = defineProps({
