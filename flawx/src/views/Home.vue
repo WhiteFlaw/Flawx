@@ -178,7 +178,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import axios from "axios";
 //axios.defaults.baseURL = "/api";
 axios.defaults.baseURL = "http://8.130.48.246:3000";
@@ -189,227 +189,206 @@ import SyNavBar from "../components/sy-navbar";
 import SyCarousel from "../components/sy-carousel";
 import SyTabs from "../components/sy-tabs";
 
-export default {
-  name: "Home",
-  components: {
-    SyNavBar,
-    SyCarousel,
-    SyTabs,
+const activeNames = ref(["1"]);
+const cardShow = ref(null);
+const cardShow2 = ref(null);
+const count = ref(0);
+const router = useRouter();
+
+let data = reactive({
+  home_nav_user: { username: "未登录" },
+  home_nav_detail: [
+    //请求内容
+    { name: "后端", tag: "backend", active: false },
+    { name: "前端", tag: "frontend", active: false },
+    { name: "算法", tag: "algorithm", active: false },
+    { name: "设计", tag: "design", active: false },
+    { name: "人工智能", tag: "ai", active: false },
+    { name: "数据库", tag: "database", active: false },
+    { name: "安全", tag: "security", active: false },
+    { name: "杂项", tag: "else", active: false },
+  ],
+  home_new_left_detail: {
+    img: "https://s3.bmp.ovh/imgs/2022/04/06/6da731882a64835f.gif",
+    article_id: "",
+    title: "2022-4-8 | Ver0.1.2更新",
+    text: "点这了解此次更新",
+    alt: "home_new_left_detail",
   },
-  setup() {
-    const activeNames = ref(["1"]);
-    const cardShow = ref(null);
-    const cardShow2 = ref(null);
-    const count = ref(0);
-    const router = useRouter();
-    let data = reactive({
-      home_nav_user: { username: "未登录" },
-      home_nav_detail: [
-        //请求内容
-        { name: "后端", tag: "backend", active: false },
-        { name: "前端", tag: "frontend", active: false },
-        { name: "算法", tag: "algorithm", active: false },
-        { name: "设计", tag: "design", active: false },
-        { name: "人工智能", tag: "ai", active: false },
-        { name: "数据库", tag: "database", active: false },
-        { name: "安全", tag: "security", active: false },
-        { name: "杂项", tag: "else", active: false },
-      ],
-      home_new_left_detail: {
-        img: "https://s3.bmp.ovh/imgs/2022/04/06/6da731882a64835f.gif",
-        article_id: "",
-        title: "2022-4-8 | Ver0.1.2更新",
-        text: "点这了解此次更新",
-        alt: "home_new_left_detail",
+  home_new_mid_page_news: [],
+  home_new_mid_page_hot: [],
+  home_adver_right_index: [
+    {
+      url: "https://img-bss.csdn.net/1647926800463.jpg",
+      text: "",
+      alt: "",
+    },
+    {
+      url: "https://img-bss.csdn.net/1648036050414.png",
+      text: "",
+      alt: "",
+    },
+    {
+      url: "https://img-bss.csdn.net/1647921575623.png",
+      text: "",
+      alt: "",
+    },
+    {
+      url: "https://img-bss.csdn.net/1647486977227.png",
+      text: "",
+      alt: "",
+    },
+  ],
+  countTime: 3,
+  load: true,
+  home_article_type: [
+    { label: "推荐", name: "first", id: 0 },
+    { label: "热门", name: "second", id: 1 },
+    { label: "关注", name: "third", id: 2 },
+  ],
+  home_article_content: [
+    [],
+    [],
+    [
+      {
+        article_title: "offline",
+        article_content: "'foucus' module coming soon...",
+        article_id: 11,
       },
-      home_new_mid_page_news: [],
-      home_new_mid_page_hot: [],
-      home_adver_right_index: [
-        {
-          url: "https://img-bss.csdn.net/1647926800463.jpg",
-          text: "",
-          alt: "",
-        },
-        {
-          url: "https://img-bss.csdn.net/1648036050414.png",
-          text: "",
-          alt: "",
-        },
-        {
-          url: "https://img-bss.csdn.net/1647921575623.png",
-          text: "",
-          alt: "",
-        },
-        {
-          url: "https://img-bss.csdn.net/1647486977227.png",
-          text: "",
-          alt: "",
-        },
-      ],
-      countTime: 3,
-      load: true,
-      home_article_type: [
-        { label: "推荐", name: "first", id: 0 },
-        { label: "热门", name: "second", id: 1 },
-        { label: "关注", name: "third", id: 2 },
-      ],
-      home_article_content: [
-        [],
-        [],
-        [
-          {
-            article_title: "offline",
-            article_content: "'foucus' module coming soon...",
-            article_id: 11,
-          },
-        ],
-      ],
-      activities: [
-        {
-          content: "offline",
-          timestamp: "2018-04-12 20:46",
-          size: "large",
-          type: "primary",
-          icon: MoreFilled,
-        },
-        {
-          content: "offline",
-          timestamp: "2018-04-03 20:46",
-          type: "success",
-          color: "#0bbd87",
-        },
-        {
-          content: "offline",
-          timestamp: "2018-04-03 20:46",
-          type: "warning",
-          size: "large",
-        },
-        {
-          content: "offline",
-          timestamp: "2018-04-03 20:46",
-          type: "danger",
-          hollow: true,
-        },
-        {
-          content: "offline",
-          type: "info",
-          timestamp: "2018-04-08 20:46",
-        },
-      ],
-    });
-    onMounted(() => {
-      getLatestArticle();
-      getHottestArticle();
-      changeUserData();
-      getChangelog();
-      xxx();
-    });
+    ],
+  ],
+  activities: [
+    {
+      content: "offline",
+      timestamp: "2018-04-12 20:46",
+      size: "large",
+      type: "primary",
+      icon: MoreFilled,
+    },
+    {
+      content: "offline",
+      timestamp: "2018-04-03 20:46",
+      type: "success",
+      color: "#0bbd87",
+    },
+    {
+      content: "offline",
+      timestamp: "2018-04-03 20:46",
+      type: "warning",
+      size: "large",
+    },
+    {
+      content: "offline",
+      timestamp: "2018-04-03 20:46",
+      type: "danger",
+      hollow: true,
+    },
+    {
+      content: "offline",
+      type: "info",
+      timestamp: "2018-04-08 20:46",
+    },
+  ],
+});
+onMounted(() => {
+  getLatestArticle();
+  getHottestArticle();
+  changeUserData();
+  getChangelog();
+  xxx();
+});
 
-    const load = () => {
-      count.value += 2;
-    };
+const load = () => {
+  count.value += 2;
+};
 
-    const xxx = () => {
-      data.countTime -= 1;
-      if (data.countTime == 0) {
-        data.load = false;
-        clearInterval(interval);
-      }
-    };
-    let interval = setInterval(xxx, 1000);
-    function getChangelog() {
-      axios.post("/getChangelog").then((res) => {
-        //console.log(res.data[0].article_id);
-        data.home_new_left_detail.article_id = res.data[0].article_id;
-        data.home_new_left_detail.title = res.data[0].article_title;
-      });
-    }
+const xxx = () => {
+  data.countTime -= 1;
+  if (data.countTime == 0) {
+    data.load = false;
+    clearInterval(interval);
+  }
+};
+let interval = setInterval(xxx, 1000);
 
-    function changeUserData() {
-      if (localStorage.getItem("username")) {
-        data.home_nav_user.username = localStorage.getItem("username");
-      }
-    }
+function getChangelog() {
+  axios.post("/getChangelog").then((res) => {
+    //console.log(res.data[0].article_id);
+    data.home_new_left_detail.article_id = res.data[0].article_id;
+    data.home_new_left_detail.title = res.data[0].article_title;
+  });
+}
 
-    function arrowClick(val) {
-      //$ref在setup内会无法获取元素的ref属性值(vue3中没有$refs这一说),ref 需要在dom渲染完成后才会有，在使用的时候确保dom已经渲染完成,即mounted和以后。
-      //在setup里"const 元素的ref属性值 = ref(null),然后return出去,再在mounted里"元素的ref属性值.value"即可
-      if (val === "right") {
-        cardShow.value.next();
-      } else {
-        cardShow.value.prev();
-      }
-    }
+function changeUserData() {
+  if (localStorage.getItem("username")) {
+    data.home_nav_user.username = localStorage.getItem("username");
+  }
+}
 
-    function arrowClick2(val) {
-      //$ref在setup内会无法获取元素的ref属性值,ref 需要在dom渲染完成后才会有，在使用的时候确保dom已经渲染完成。
-      if (val === "right") {
-        cardShow2.value.next();
-      } else {
-        cardShow2.value.prev();
-      }
-    }
+function arrowClick(val) {
+  //$ref在setup内会无法获取元素的ref属性值(vue3中没有$refs这一说),ref 需要在dom渲染完成后才会有，在使用的时候确保dom已经渲染完成,即mounted和以后。
+  //在setup里"const 元素的ref属性值 = ref(null),然后return出去,再在mounted里"元素的ref属性值.value"即可
+  if (val === "right") {
+    cardShow.value.next();
+  } else {
+    cardShow.value.prev();
+  }
+}
 
-    const clickNav = (params) => {
-      router.push({
-        path: "/category",
-        query: {
-          id: params,
-        },
-      });
-    };
-    const toArticle = (params) => {
-      router.push({
-        path: "/article",
-        query: {
-          id: params,
-        },
-      });
-    };
+function arrowClick2(val) {
+  //$ref在setup内会无法获取元素的ref属性值,ref 需要在dom渲染完成后才会有，在使用的时候确保dom已经渲染完成。
+  if (val === "right") {
+    cardShow2.value.next();
+  } else {
+    cardShow2.value.prev();
+  }
+}
 
-    function getLatestArticle() {
-      axios.get("/getLatestArticle").then((res) => {
-        data.home_new_mid_page_news.push(
-          [res.data[0], res.data[1], res.data[2], res.data[3]],
-          [res.data[4], res.data[5], res.data[6], res.data[7]]
-        );
-        data.home_article_content[0] = res.data;
-      });
-    }
+const clickNav = (params) => {
+  router.push({
+    path: "/category",
+    query: {
+      id: params,
+    },
+  });
+};
+const toArticle = (params) => {
+  router.push({
+    path: "/article",
+    query: {
+      id: params,
+    },
+  });
+};
 
-    function getHottestArticle() {
-      axios.get("/getHottestArticle").then((res) => {
-        data.home_article_content[1] = res.data;
-        data.home_new_mid_page_hot.push(
-          [res.data[0], res.data[1], res.data[2], res.data[3]],
-          [res.data[4], res.data[5], res.data[6], res.data[7]]
-        );
-      });
-    }
+function getLatestArticle() {
+  axios.get("/getLatestArticle").then((res) => {
+    data.home_new_mid_page_news.push(
+      [res.data[0], res.data[1], res.data[2], res.data[3]],
+      [res.data[4], res.data[5], res.data[6], res.data[7]]
+    );
+    data.home_article_content[0] = res.data;
+  });
+}
 
-    const dataProcessing = (arr, num) => {
-      let newArr = [];
-      for (let i = 0; i < arr.length; ) {
-        newArr.push(arr.slice(i, (i += num)));
-      }
-      data.newArr = newArr;
-      data.user_article_content_page = newArr.length;
-      return newArr;
-    };
+function getHottestArticle() {
+  axios.get("/getHottestArticle").then((res) => {
+    data.home_article_content[1] = res.data;
+    data.home_new_mid_page_hot.push(
+      [res.data[0], res.data[1], res.data[2], res.data[3]],
+      [res.data[4], res.data[5], res.data[6], res.data[7]]
+    );
+  });
+}
 
-    return {
-      data,
-      load,
-      activeNames,
-      clickNav,
-      toArticle,
-      arrowClick,
-      arrowClick2,
-      cardShow,
-      cardShow2,
-      dataProcessing
-    };
-  },
+const dataProcessing = (arr, num) => {
+  let newArr = [];
+  for (let i = 0; i < arr.length; ) {
+    newArr.push(arr.slice(i, (i += num)));
+  }
+  data.newArr = newArr;
+  data.user_article_content_page = newArr.length;
+  return newArr;
 };
 </script>
 
@@ -431,7 +410,7 @@ export default {
 
 .el-collapse {
   position: relative;
-  top: 45px;
+  top: 0px;
 }
 
 .el-carousel p {
@@ -466,7 +445,7 @@ export default {
 
 .home_new {
   position: relative;
-  top: 110px;
+  top: 30px;
   left: 70px;
   height: 435px;
   width: 1380px;

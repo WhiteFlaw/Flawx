@@ -89,12 +89,14 @@
         >
           <p>名为{{ data.ruleForm.username }}</p>
           <p>的{{ data.ruleForm.sex }}啊</p>
-          <p>
-            你愿意作为另一个「人」继续生活下去麽?
-          </p>
+          <p>你愿意作为另一个「人」继续生活下去麽?</p>
           <div style="margin-left: 100px; margin-top: 30px">
             <el-button type="primary" @click="cancelSubmit()">再想想</el-button>
-            <el-button type="warning" style="margin-left: 50px" @click="submitForm()" plain
+            <el-button
+              type="warning"
+              style="margin-left: 50px"
+              @click="submitForm()"
+              plain
               >是的</el-button
             >
           </div>
@@ -110,6 +112,7 @@
             @click="update_avatar_active(item)"
           >
             <img
+              class="imga"
               :src="item.url"
               :alt="item.alt"
               style="height: 98%; width: 98%"
@@ -377,7 +380,7 @@ export default {
 
 .update_container {
   position: relative;
-  top: 100px;
+  top: 50px;
   left: 9%;
   height: 500px;
   width: 500px;
@@ -399,7 +402,7 @@ export default {
   position: absolute;
   top: 25%;
   left: 67.5%;
-  z-index:3000;
+  z-index: 3000;
   border-radius: 3px;
   padding: 20px;
   height: 200px;
@@ -449,5 +452,10 @@ export default {
   border-radius: 2%;
   overflow: hidden;
   background-color: #fff;
+}
+
+.imga:hover {
+  transition: 0.5s;
+  transform: scale(0.9);
 }
 </style>

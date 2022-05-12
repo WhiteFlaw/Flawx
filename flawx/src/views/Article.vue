@@ -14,8 +14,12 @@
           }}</el-tag>
         </template>
         <template #author_else>
-          <el-button type="primary">赞同:{{ data.article_author.agree }}</el-button>
-          <el-button type="success">受访:{{ data.article_author.totalView }}</el-button>
+          <el-button type="primary"
+            >赞同:{{ data.article_author.agree }}</el-button
+          >
+          <el-button type="success"
+            >受访:{{ data.article_author.totalView }}</el-button
+          >
         </template>
       </sy-author-1>
     </div>
@@ -91,199 +95,167 @@
     那么Home页面请求的记录也将包含文章内容,主页不展示内容,这没有必要,那么如何不请求内容的同时请求到id和文章名?
      -->
 
-<script>
+<script setup>
 import axios from "axios";
 //axios.defaults.baseURL = "/api";
 axios.defaults.baseURL = "http://8.130.48.246:3000";
-import { reactive, ref, onMounted } from "vue";
-import { defineComponent } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { reactive, ref, onMounted, computed } from "vue";
+import { useRoute } from "vue-router";
 import { ElMessage } from "element-plus";
 import SyNavBar from "../components/sy-navbar";
 import SyAuthor1 from "../components/sy-author1";
 
-export default defineComponent({
-  name: "Article",
-  components: {
-    SyNavBar,
-    SyAuthor1,
+const $route = useRoute();
+let data = reactive({
+  authorname: "用户名请求失败",
+  article_author: {
+    motto: "motto请求失败",
+    age: 1,
+    tag: [],
+    agree: "?",
+    register_time: "失败",
+    totalView: "失败",
+    avatar: "",
   },
+  article_list: [
+    { article_title: "失败", id: "" },
+    { article_title: "失败", id: "" },
+    { article_title: "失败", id: "" },
+    { article_title: "失败", id: "" },
+    { article_title: "失败", id: "" },
+  ],
+  article_data: {
+    article_title: "文章题目请求失败",
+    artcile_content: `文章内容请求失败`,
+    viewCount: "失败",
+    article_agree: "?",
+    article_posttime: "?",
+  },
+  article_comments_list: [],
+});
+onMounted(() => {
+  article_comments_get();
+  article_article_get();
+});
 
-  setup() {
-    const $route = useRoute();
-    let data = reactive({
-      authorname: "用户名请求失败",
-      article_author: {
-        motto: "motto请求失败",
-        age: 1,
-        tag: [],
-        agree: "?",
-        register_time: "失败",
-        totalView: "失败",
-        avatar: "",
-      },
-      article_list: [
-        { article_title: "失败", id: "" },
-        { article_title: "失败", id: "" },
-        { article_title: "失败", id: "" },
-        { article_title: "失败", id: "" },
-        { article_title: "失败", id: "" },
-      ],
-      article_data: {
-        article_title: "文章题目请求失败",
-        artcile_content: `文章内容请求失败`,
-        viewCount: "失败",
-        article_agree: "?",
-        article_posttime: "?",
-      },
-      article_comments_list: [],
-    });
-    onMounted(() => {
-      article_comments_get();
-      article_article_get();
-    });
-
-    //已解决问题:将get请求更换为post后可正常使用
-    function article_comments_submit(textarea) {
-      //localStorage.setItem("username", "白瑕"); //待会记得删
-      if (localStorage.getItem("username")) {
-        const username = localStorage.getItem("username");
-        axios
-          .post("/admin/insertComments", {
-            comment_name: username,
-            comment_content: textarea, //不需要.value;
-            comment_avatar: localStorage.getItem("avatar"),
-            article_id: $route.query.id, //不是$router
-            //发表时间甚麽的就交给后端吧
-          })
-          .then(() => {
-            this.$message({ message: "评论成功.", type: "success" });
-            //先push进去显示着,下次它再进来再请求
-            data.article_comments_list.push({
-              comment_name: username,
-              comment_content: textarea,
-              article_id: $route.query.id,
-              comment_avatar: localStorage.getItem("avatar"),
-            });
-          });
-      } else {
-        this.$message.error("请先登录，如已登录请刷新页面。");
-      }
-    }
-
-    function article_article_get() {
-      axios
-        .post("/getArticleById", {
+function article_comments_submit(textarea) {
+  if (localStorage.getItem("username")) {
+    const username = localStorage.getItem("username");
+    axios
+      .post("/admin/insertComments", {
+        comment_name: username,
+        comment_content: textarea, //不需要.value;
+        comment_avatar: localStorage.getItem("avatar"),
+        article_id: $route.query.id, //不是$router
+        //发表时间甚麽的就交给后端吧
+      })
+      .then(() => {
+        this.$message({ message: "评论成功.", type: "success" });
+        //先push进去显示着,下次它再进来再请求
+        data.article_comments_list.push({
+          comment_name: username,
+          comment_content: textarea,
           article_id: $route.query.id,
+          comment_avatar: localStorage.getItem("avatar"),
+        });
+      });
+  } else {
+    this.$message.error("请先登录，如已登录请刷新页面。");
+  }
+}
+
+function article_article_get() {
+  axios
+    .post("/getArticleById", {
+      article_id: $route.query.id,
+    })
+    .then((res) => {
+      //console.log(res.data[0]);
+      data.article_data = res.data[0];
+      data.authorname = res.data[0].article_authorname;
+      axios
+        .post("/getUserData", {
+          username: res.data[0].article_authorname,
         })
-        .then((res) => {
-          //console.log(res.data[0]);
-          data.article_data = res.data[0];
-          data.authorname = res.data[0].article_authorname;
+        .then((result) => {
+          data.article_author = result.data[0];
+          data.article_author.tag = [
+            result.data[0].tag1,
+            result.data[0].tag2,
+            result.data[0].tag3,
+            result.data[0].tag4,
+          ];
+          data.article_author.register_time =
+            result.data[0].register_time.substring(0, 10) + "入驻";
+          data.article_author.totalView += 1;
+          data.article_data.viewCount += 1;
           axios
-            .post("/getUserData", {
-              username: res.data[0].article_authorname,
+            .post("/updateViewCount", {
+              viewCount: data.article_data.viewCount, //后面要把阅读量放到data.article_view里
+              totalView: data.article_author.totalView,
+              article_id: $route.query.id,
+              username: data.authorname,
             })
-            .then((result) => {
-              data.article_author = result.data[0];
-              data.article_author.tag = [
-                result.data[0].tag1,
-                result.data[0].tag2,
-                result.data[0].tag3,
-                result.data[0].tag4,
-              ];
-              data.article_author.register_time =
-                result.data[0].register_time.substring(0, 10) + "入驻";
-              data.article_author.totalView += 1;
-              data.article_data.viewCount += 1;
+            .then((res) => {
+              if (res.data.status == true) {
+                ElMessage.success(res.data.msg);
+              } else {
+                ElMessage.error(res.data.msg);
+              }
               axios
-                .post("/updateViewCount", {
-                  viewCount: data.article_data.viewCount, //后面要把阅读量放到data.article_view里
-                  totalView: data.article_author.totalView,
-                  article_id: $route.query.id,
+                .post("/get5UserArticle", {
                   username: data.authorname,
                 })
-                .then((res) => {
-                  if (res.data.status == true) {
-                    ElMessage.success(res.data.msg);
-                  } else {
-                    ElMessage.error(res.data.msg);
-                  }
-                  axios
-                    .post("/get5UserArticle", {
-                      username: data.authorname,
-                    })
-                    .then((result) => {
-                      data.article_list = result.data;
-                    });
+                .then((result) => {
+                  data.article_list = result.data;
                 });
             });
         });
-    }
+    });
+}
 
-    function article_comments_get() {
-      const id = $route.query.id;
-      axios
-        .post("/getComments", {
-          article_id: id,
-        })
-        .then((res) => {
-          data.article_comments_list = res.data;
-        });
-    }
+function article_comments_get() {
+  const id = $route.query.id;
+  axios
+    .post("/getComments", {
+      article_id: id,
+    })
+    .then((res) => {
+      data.article_comments_list = res.data;
+    });
+}
 
-    const toAnotherArticle = (id) => {
-      axios
-        .post("/getArticleById", {
-          article_id: id,
-        })
-        .then((res) => {
-          data.article_data = res.data[0];
-          data.authorname = res.data[0].article_authorname;
-        });
-    };
+const toAnotherArticle = (id) => {
+  axios
+    .post("/getArticleById", {
+      article_id: id,
+    })
+    .then((res) => {
+      data.article_data = res.data[0];
+      data.authorname = res.data[0].article_authorname;
+    });
+};
 
-    function updateAgree() {
-      data.article_author.agree += 1;
-      data.article_data.article_agree += 1;
+function updateAgree() {
+  data.article_author.agree += 1;
+  data.article_data.article_agree += 1;
 
-      const id = $route.query.id;
-      axios
-        .post("/updateAgree", {
-          article_id: id,
-          article_agree: data.article_data.article_agree,
-          agree: data.article_author.agree,
-          username: data.authorname,
-        })
-        .then((res) => {
-          if (res.data.status === true) {
-            ElMessage.success(res.data.msg);
-          } else {
-            ElMessage.error(res.data.msg);
-          }
-        });
-    }
-
-    return {
-      data,
-      article_comments_submit,
-      article_comments_get,
-      updateAgree,
-      toAnotherArticle,
-    };
-  },
-  data() {
-    return {
-      textarea: "",
-      agreeCount: 1,
-    };
-  },
-  methods: {},
-  create() {
-    //请求评论人,时间,内容
-    //根据url参数请求文章和作者信息
-  },
-});
+  const id = $route.query.id;
+  axios
+    .post("/updateAgree", {
+      article_id: id,
+      article_agree: data.article_data.article_agree,
+      agree: data.article_author.agree,
+      username: data.authorname,
+    })
+    .then((res) => {
+      if (res.data.status === true) {
+        ElMessage.success(res.data.msg);
+      } else {
+        ElMessage.error(res.data.msg);
+      }
+    });
+}
 </script>
 <style>
 .el-page-header {

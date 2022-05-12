@@ -138,7 +138,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import axios from "axios";
 //axios.defaults.baseURL = "/api";
 axios.defaults.baseURL = "http://8.130.48.246:3000";
@@ -148,160 +148,143 @@ import { useRouter } from "vue-router";
 import { reactive, ref } from "vue";
 import SyNavBar from "../components/sy-navbar";
 
-export default {
-  name: "Login",
-  components: {
-    SyNavBar,
+const loginForm_mima = ref(null);
+const router = useRouter();
+const login_introduction = ref(`Created at 2022-4-6`);
+let data = reactive({
+  login_fangfa: [
+    {
+      name: "微信登录",
+      value: "weixin",
+      active: false,
+    },
+    {
+      name: "免密登录",
+      value: "mianmi",
+      active: false,
+    },
+    {
+      name: "密码登录",
+      value: "mima",
+      active: true,
+    },
+  ],
+  login_another_fangfa: [
+    {
+      name: "github",
+      //url: "login_github",
+      img: "https://s3.bmp.ovh/imgs/2022/03/70cf5524adc09632.jpg",
+      introduction: "github",
+    },
+    {
+      name: "QQ",
+      //url: "login_qq",
+      img: "https://s3.bmp.ovh/imgs/2022/03/bdba4466c0573821.jpg",
+      introduction: "QQ",
+    },
+    {
+      name: "baidu",
+      //url: "login_baidu",
+      img: "https://s3.bmp.ovh/imgs/2022/03/450b74064e31d62f.jpg",
+      introduction: "baidu",
+    },
+  ],
+  ruleForm: {
+    phonenumber: "",
+    yanzhengma: "",
+    username: "",
+    password: "",
   },
-  setup() {
-    const loginForm_mima = ref(null);
-    const router = useRouter();
-    const login_introduction = ref(`Created at 2022-4-6`);
-    let data = reactive({
-      login_fangfa: [
-        {
-          name: "微信登录",
-          value: "weixin",
-          active: false,
-        },
-        {
-          name: "免密登录",
-          value: "mianmi",
-          active: false,
-        },
-        {
-          name: "密码登录",
-          value: "mima",
-          active: true,
-        },
-      ],
-      login_another_fangfa: [
-        {
-          name: "github",
-          //url: "login_github",
-          img: "https://s3.bmp.ovh/imgs/2022/03/70cf5524adc09632.jpg",
-          introduction: "github",
-        },
-        {
-          name: "QQ",
-          //url: "login_qq",
-          img: "https://s3.bmp.ovh/imgs/2022/03/bdba4466c0573821.jpg",
-          introduction: "QQ",
-        },
-        {
-          name: "baidu",
-          //url: "login_baidu",
-          img: "https://s3.bmp.ovh/imgs/2022/03/450b74064e31d62f.jpg",
-          introduction: "baidu",
-        },
-      ],
-      ruleForm: {
-        phonenumber: "",
-        yanzhengma: "",
-        username: "",
-        password: "",
+  checked: true,
+  rules: {
+    phonenumber: [
+      { required: "true", message: "手机号不能为空", trigger: "blur" },
+    ],
+    yanzhengma: [
+      { require: true, message: "验证码", trigger: "blur" },
+      {
+        min: 6,
+        max: 6,
+        message: "验证码应当为6位数",
+        trigger: "blur",
       },
-      checked: true,
-      rules: {
-        phonenumber: [
-          { required: "true", message: "手机号不能为空", trigger: "blur" },
-        ],
-        yanzhengma: [
-          { require: true, message: "验证码", trigger: "blur" },
-          {
-            min: 6,
-            max: 6,
-            message: "验证码应当为6位数",
-            trigger: "blur",
-          },
-        ],
-        username: [
-          {
-            require: true,
-            message: "用户名",
-            trigger: "blur",
-          },
-          {
-            min: 3,
-            max: 8,
-            message: "用户名长度应当在3-7个字符之间",
-            trigger: "blur",
-          },
-        ],
-        password: [
-          {
-            required: true,
-            message: "密码不能为空",
-            trigger: "blur",
-          },
-          {
-            min: 6,
-            max: 12,
-            message: "密码长度应当在6-12个字符之间",
-            trigger: "blur",
-          },
-        ],
+    ],
+    username: [
+      {
+        require: true,
+        message: "用户名",
+        trigger: "blur",
       },
-    });
+      {
+        min: 3,
+        max: 8,
+        message: "用户名长度应当在3-7个字符之间",
+        trigger: "blur",
+      },
+    ],
+    password: [
+      {
+        required: true,
+        message: "密码不能为空",
+        trigger: "blur",
+      },
+      {
+        min: 6,
+        max: 12,
+        message: "密码长度应当在6-12个字符之间",
+        trigger: "blur",
+      },
+    ],
+  },
+});
 
-    const login_title_active = (params) => {
-      //console.log(params);
-      data.login_fangfa.forEach((item) => {
-        item.active = false;
-      });
-      params.active = true;
-    };
+const login_title_active = (params) => {
+  //console.log(params);
+  data.login_fangfa.forEach((item) => {
+    item.active = false;
+  });
+  params.active = true;
+};
 
-    function submitForm_mima() {
-      if (
-        localStorage.getItem("username") == data.ruleForm.username &&
-        localStorage.getItem("passCard")
-      ) {
-        ElMessage.warning("你已登陆,有效期一周,请不要重复请求.");
+function submitForm_mima() {
+  if (
+    localStorage.getItem("username") == data.ruleForm.username &&
+    localStorage.getItem("passCard")
+  ) {
+    ElMessage.warning("你已登陆,有效期一周,请不要重复请求.");
+  } else {
+    localStorage.clear();
+    loginForm_mima.value.validate(async (valid) => {
+      if (valid) {
+        axios
+          .post("/doLogin", {
+            username: data.ruleForm.username,
+            password: md5(data.ruleForm.password),
+          })
+          .then((res) => {
+            if (res.data.status == true) {
+              console.log(res.data.avatar);
+              localStorage.setItem("passCard", res.data.token); //记得这里要存相应信息
+              localStorage.setItem("username", res.data.userData.username);
+              localStorage.setItem("avatar", res.data.userData.avatar);
+              localStorage.setItem(
+                "register_time",
+                res.data.userData.register_time
+              );
+              window.location.href = "#/user";
+            } else {
+              ElMessage.error("报告:" + res.data.msg);
+            }
+          });
       } else {
-        localStorage.clear();
-        loginForm_mima.value.validate(async (valid) => {
-          if (valid) {
-            axios
-              .post("/doLogin", {
-                username: data.ruleForm.username,
-                password: md5(data.ruleForm.password),
-              })
-              .then((res) => {
-                if (res.data.status == true) {
-                  console.log(res.data.avatar);
-                  localStorage.setItem("passCard", res.data.token); //记得这里要存相应信息
-                  localStorage.setItem("username", res.data.userData.username);
-                  localStorage.setItem("avatar", res.data.userData.avatar);
-                  localStorage.setItem(
-                    "register_time",
-                    res.data.userData.register_time
-                  );
-                  window.location.href = "#/user";
-                } else {
-                  ElMessage.error("报告:" + res.data.msg);
-                }
-              });
-          } else {
-            ElMessage.warning("请检查信息是否完整并符合规则.");
-          }
-        });
+        ElMessage.warning("请检查信息是否完整并符合规则.");
       }
-    }
+    });
+  }
+}
 
-    const toRegister = () => {
-      router.push("/register");
-    };
-
-    return {
-      loginForm_mima,
-      data,
-      login_introduction,
-      login_title_active,
-      submitForm_mima,
-      toRegister,
-    };
-  },
+const toRegister = () => {
+  router.push("/register");
 };
 </script>
 <style>

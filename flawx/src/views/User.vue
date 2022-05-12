@@ -249,7 +249,7 @@ export default {
   height: 80px;
   line-height: 40px;
   text-align: center;
-  margin-top: 50px;
+  margin-top: 10px;
   margin-left: 135px;
   list-style-type: none;
   float: left;
