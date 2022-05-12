@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref, onUpdated, watchEffect, defineProps } from "vue";
+import { ref, onUpdated, watchEffect } from "vue";
 
 const props = defineProps({
   sy_tab_data: {
