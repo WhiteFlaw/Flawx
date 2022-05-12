@@ -1,5 +1,3 @@
-<!-- [{label, name, id},{label, name, id},] -->
-<!-- 传入需要的label,name, 我们是利用id属性来判定把哪个数组的内容填入哪个标签页的, 所以要求传id吧...在这里手动添加有点麻烦. -->
 <template>
   <div class="sy_tabs">
     <el-tabs v-model="activeName" class="sy_tabs_main" @tab-click="handleClick">
@@ -15,65 +13,29 @@
   </div>
 </template>
 
-<script>
-import { ref, onUpdated, watch } from "vue";
-export default {
-  name: "sy-tabs",
-  props: {
-    sy_tab_data: {
-      type: Array,
-      default: [
-        { label: "label", name: "name", id: 1 },
-        { label: "label", name: "name", id: 1 },
-      ],
-    },
+<script setup>
+import { ref, onUpdated, watchEffect, defineProps } from "vue";
+
+const props = defineProps({
+  sy_tab_data: {
+    type: Array,
+    default: [
+      { label: "label", name: "name", id: 1 },
+      { label: "label", name: "name", id: 1 },
+    ],
   },
-  setup(props) {
-    const sy_tab_data = ref(props.sy_tab_data);
-    watch(
-      () => props.sy_tab_data,
-      (newValue, oldValue) => {
-        sy_tab_data = newValue;
-      }
-    );
+});
 
-    onUpdated(() => {
-      handleClick();
-    });
+let sy_tab_data = ref(props.sy_tab_data); //这里是变量, 不要用const;
 
-    const handleClick = () => {
-      
-    };
+onUpdated(() => {
+  handleClick();
+});
 
-    return {
-      sy_tab_data,
-      handleClick,
-    };
-  },
-};
+watchEffect(() => {
+  sy_tab_data = props.sy_tab_data;
+});
 </script>
-
-<style>
-* {
-  margin: 0;
-  padding: 0;
-}
-
-.el-tabs {
-  margin-left: 35px;
-  width: 950px;
-}
-
-.el-tabs__nav {
-  height: 70px;
-  line-height: 70px;
-}
-
-*::-webkit-scrollbar {
-  display: none;
-}
-</style>
-
 <style scoped>
 .sy_tabs {
   position: relative;
