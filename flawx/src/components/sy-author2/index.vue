@@ -15,51 +15,37 @@
   </div>
 </template>
 
-<script>
-import { ref, reactive, onMounted, watch } from "vue";
-export default {
-  props: {
-    author_avatar: {
-      type: String,
-      default: "",
-    },
-    author_name: {
-      type: String,
-    },
-    author_age: {
-      type: String,
-    },
-  },
-  setup(props) {
-    const author_name = ref(props.author_name);
-    const author_avatar = ref(props.author_avatar);
-    const author_age = ref(props.author_age);
-    watch(
-      () => props.author_avatar,
-      (newValue) => {
-        console.log(newValue);
-        author_avatar.value = newValue;
-      }
-    );
+<script setup>
+import { ref, watchEffect, defineProps } from "vue";
 
-    watch(
-      () => props.author_name,
-      (newValue) => {
-        console.log(newValue);
-        author_name.value = newValue;
-      }
-    );
-
-    watch(
-      () => props.author_age,
-      (newValue) => {
-        console.log(newValue);
-        author_age.value = newValue;
-      }
-    );
-    return { author_name, author_avatar, author_age };
+const props = defineProps({
+  author_avatar: {
+    type: String,
+    default: "",
   },
-};
+  author_name: {
+    type: String,
+  },
+  author_age: {
+    type: String,
+  },
+});
+
+const author_name = ref(props.author_name);
+const author_avatar = ref(props.author_avatar);
+const author_age = ref(props.author_age);
+
+watchEffect(() => {
+  author_avatar.value = props.author_avatar;
+});
+
+watchEffect(() => {
+  author_name.value = props.author_name;
+});
+
+watchEffect(() => {
+  author_age.value = props.author_age;
+});
 </script>
 
 <style scoped>
@@ -102,7 +88,7 @@ export default {
   padding-right: 5px;
   padding-left: 5px;
   border-radius: 20px;
-  line-height: 30px;  
+  line-height: 30px;
   font-size: 17px;
   letter-spacing: 1px;
   transform: scale(0.8);
