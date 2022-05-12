@@ -28,95 +28,83 @@
   </el-breadcrumb>
 </template>
 
-<script>
-import { onMounted, ref, reactive } from "vue";
-import { defineComponent } from "vue";
+<script setup>
+import { onMounted, reactive } from "vue";
 import { ElMessage } from "element-plus";
 import { useRoute, useRouter } from "vue-router";
-export default defineComponent({
-  name: "NavBar",
-  setup() {
-    const $router = useRouter();
-    const $route = useRoute();
-    let data = reactive({
-      nav_data: {
-        pageName: "", //本页名
-        lastpageName: "", //上页名
-        username: "未登录", //用户名
-        avatar: "", //头像
-      },
-      pushOut: [
-        { content: "占位", link: "" },
-        { content: "个人中心", link: "/user" },
-        { content: "编辑信息", link: "/user/updateUser" },
-        { content: "登录/切换账号", link: "/login" },
-      ],
-    });
+const $router = useRouter();
+const $route = useRoute();
 
-    onMounted(() => {
-      getPageName();
-      getUsername();
-      getAvatar();
-      //getLastPageName();
-    });
-
-    function getPageName() {
-      data.nav_data.pageName = $route.name;
-    }
-    function goHome() {
-      $router.push("/");
-    }
-    function getUsername() {
-      if (localStorage.getItem("username")) {
-        data.nav_data.username = localStorage.getItem("username");
-      }
-    }
-    function getAvatar() {
-      data.nav_data.avatar = localStorage.getItem("avatar");
-    }
-
-    function goBack() {
-      $router.go(-1); //不知道这玩意行不行,没试
-    }
-    const clickPushOut = (link) => {
-      if (link === "/user" && !localStorage.getItem("passCard")) {
-        ElMessage.warning("进入用户空间须通行证,请登录以获取.");
-      } else if (
-        link === "/user/updateUser" &&
-        !localStorage.getItem("passCard")
-      ) {
-        ElMessage.warning("编辑什么,我有你的信息嘛?");
-      } else if (link === "/login" && localStorage.getItem("passCard")) {
-        localStorage.clear();
-        location.reload();
-        $router.push(link);
-        ElMessage.success("你的本地信息已清除.");
-      } else if ($route.name === "User" && link === "/user") {
-        ElMessage.success("你已经在用户空间啦...");
-      } else if ($route.name == "Updateuser" && link === "/user/updateUser") {
-        ElMessage.success("你已经在信息编辑页啦...");
-      } else {
-        $router.push(link);
-      }
-    };
-
-    function toUser() {
-      //发请求检验本地token在服务器内是否存在
-      if (!localStorage.getItem("passCard")) {
-        $router.push("/login");
-      } else {
-        $router.push("/user");
-      }
-    }
-    return {
-      data,
-      goBack,
-      toUser,
-      goHome,
-      clickPushOut,
-    };
+let data = reactive({
+  nav_data: {
+    pageName: "", //本页名
+    lastpageName: "", //上页名
+    username: "未登录", //用户名
+    avatar: "", //头像
   },
+  pushOut: [
+    { content: "占位", link: "" },
+    { content: "个人中心", link: "/user" },
+    { content: "编辑信息", link: "/user/updateUser" },
+    { content: "登录/切换账号", link: "/login" },
+  ],
 });
+
+onMounted(() => {
+  getPageName();
+  getUsername();
+  getAvatar();
+});
+
+function getPageName() {
+  data.nav_data.pageName = $route.name;
+}
+
+function goHome() {
+  $router.push("/");
+}
+
+function getUsername() {
+  if (localStorage.getItem("username")) {
+    data.nav_data.username = localStorage.getItem("username");
+  }
+}
+
+function getAvatar() {
+  data.nav_data.avatar = localStorage.getItem("avatar");
+}
+
+function goBack() {
+  $router.go(-1); //不知道这玩意行不行,没试
+}
+
+const clickPushOut = (link) => {
+  if (link === "/user" && !localStorage.getItem("passCard")) {
+    ElMessage.warning("进入用户空间须通行证,请登录以获取.");
+  } else if (link === "/user/updateUser" && !localStorage.getItem("passCard")) {
+    ElMessage.warning("编辑什么,我有你的信息嘛?");
+  } else if (link === "/login" && localStorage.getItem("passCard")) {
+    localStorage.clear();
+    location.reload();
+    $router.push(link);
+    ElMessage.success("你的本地信息已清除.");
+  } else if ($route.name === "User" && link === "/user") {
+    ElMessage.success("你已经在用户空间啦...");
+  } else if ($route.name == "Updateuser" && link === "/user/updateUser") {
+    ElMessage.success("你已经在信息编辑页啦...");
+  } else {
+    $router.push(link);
+  }
+};
+
+function toUser() {
+  //发请求检验本地token在服务器内是否存在
+  if (!localStorage.getItem("passCard")) {
+    $router.push("/login");
+  } else {
+    $router.push("/user");
+  }
+}
 </script>
 
 <style scoped>
@@ -129,8 +117,6 @@ export default defineComponent({
 }
 
 .el-breadcrumb {
-  position: fixed;
-  float: left;
   line-height: 50px;
   height: 50px; /* 别改这里 */
   width: 100%;
