@@ -141,7 +141,7 @@ const toArticle = (params) => {
   position: absolute;
   top: 0;
   left: 0px;
-  color: rgba(34, 33, 33, 0.705);
+  color: rgba(34, 33, 33);
 }
 
 .sy_carousel_title {
@@ -152,7 +152,7 @@ const toArticle = (params) => {
 
 .sy_carousel_title img {
   height: 23px;
-  padding: 3px;
+  padding: 2px;
 }
 
 .sy_carousel_loading {
@@ -160,6 +160,6 @@ const toArticle = (params) => {
   top: 45px;
   border-radius: 1%;
   overflow: hidden;
-  border: 1px solid rgb(192, 191, 191);
+  border: 3px solid rgb(192, 191, 191);
 }
 </style>
