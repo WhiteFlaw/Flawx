@@ -45,6 +45,7 @@ import {
   //defineProps,  defineProps不再需要引入
   //defineEmits, defineEmits不再需要引入
   watchEffect,
+  computed //nmmd没引入computed, 这个组件内出错, 会导致所有引入这个组件的页面在某行报错, 而且报错行不是真正错的那行
 } from "vue";
 import { useRouter } from "vue-router";
 
