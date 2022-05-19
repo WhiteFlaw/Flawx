@@ -1,54 +1,64 @@
 <template>
   <sy-nav-bar></sy-nav-bar>
   <div class="article_body">
-    <div class="article_author">
-      <sy-author-1
-        v-model:author_avatar="data.article_author.avatar"
-        v-model:author_name="data.authorname"
-        v-model:author_downname="data.article_author.register_time"
-        v-model:author_motto="data.article_author.motto"
-      >
-        <template #author_tag>
-          <el-tag v-for="item in data.article_author.tag" :key="item">{{
-            item
-          }}</el-tag>
-        </template>
-        <template #author_else>
-          <el-button type="primary"
-            >赞同:{{ data.article_author.agree }}</el-button
+    <div class="article_else">
+      <div class="article_author">
+        <sy-author-1
+          :author_avatar_size="62"
+          v-model:author_avatar="data.article_author.avatar"
+          v-model:author_name="data.authorname"
+          v-model:author_downname="data.article_author.register_time"
+          v-model:author_motto="data.article_author.motto"
+        >
+          <template #author_tag>
+            <el-tag v-for="item in data.article_author.tag" :key="item">{{
+              item
+            }}</el-tag>
+          </template>
+          <template #author_else>
+            <el-button type="primary"
+              >赞同:{{ data.article_author.agree }}</el-button
+            >
+            <el-button type="success"
+              >受访:{{ data.article_author.totalView }}</el-button
+            >
+          </template>
+        </sy-author-1>
+      </div>
+
+      <div class="article_list">
+        <div>
+          <p style="margin-left: 10px">{{ data.authorname }}的其他文章</p>
+        </div>
+        <ul>
+          <li
+            v-for="item in data.article_list"
+            :key="item"
+            @click="toAnotherArticle(item.article_id)"
           >
-          <el-button type="success"
-            >受访:{{ data.article_author.totalView }}</el-button
-          >
-        </template>
-      </sy-author-1>
+            <h3>{{ item.article_title }}</h3>
+          </li>
+        </ul>
+      </div>
     </div>
 
-    <div class="article_list">
-      <div>
-        <p style="margin-left: 10px">{{ data.authorname }}的其他文章</p>
-      </div>
-      <ul>
-        <li
-          v-for="item in data.article_list"
-          :key="item"
-          @click="toAnotherArticle(item.article_id)"
-        >
-          <h3>{{ item.article_title }}</h3>
-        </li>
-      </ul>
-    </div>
     <div class="article_article">
-      <h2>{{ data.article_data.article_title }}</h2>
-      <p v-html="data.article_data.article_content"></p>
-      <div class="article_viewCount">
-        <p>|{{ data.article_data.article_posttime.substring(0, 10) }}</p>
-        <p>| View:{{ data.article_data.viewCount }}</p>
-      </div>
-      <div class="article_agree">
-        <el-button type="success" plain @click="updateAgree"
-          >好! ({{ data.article_data.article_agree }})</el-button
-        >
+      <div class="article_content">
+        <div class="article_title">
+          <h2>{{ data.article_data.article_title }}</h2>
+          <div>
+            <p>
+              | View:{{ data.article_data.viewCount }} |
+              {{ data.article_data.article_posttime.substring(0, 10) }}
+            </p>
+          </div>
+        </div>
+        <div class="article_text">
+          <p v-html="data.article_data.article_content"></p>
+          <el-button type="success" plain @click="updateAgree"
+            >好! ({{ data.article_data.article_agree }})</el-button
+          >
+        </div>
       </div>
       <div class="article_comments">
         <h3>评论:{{ data.article_comments_list.length }}</h3>
@@ -247,9 +257,9 @@ function updateAgree() {
   });
 }
 </script>
+
 <style>
 .el-page-header {
-  /* 一定不要删 */
   float: left;
   height: 55px;
   padding-right: 20px;
@@ -267,143 +277,5 @@ function updateAgree() {
 }
 </style>
 <style scoped>
-.article_body {
-  background-color: rgb(241, 241, 241);
-}
-
-.article_author {
-  position: relative;
-  top: 65px;
-  left: 40px;
-}
-
-.article_author_action {
-  position: absolute;
-  top: 230px;
-  left: 50px;
-}
-
-.article_author_action_agree {
-  margin-left: 60px;
-}
-
-.article_list {
-  position: relative;
-  overflow: hidden;
-  list-style-type: none;
-  border-radius: 1%;
-  top: 75px;
-  left: 40px;
-  height: 320px;
-  width: 330px;
-  background-color: #fff;
-}
-
-.article_list div {
-  height: 50px;
-  line-height: 50px;
-  list-style-type: none;
-  letter-spacing: 1px;
-  color: rgb(102, 102, 102);
-  font-weight: 600;
-  border-bottom: 0.5px solid rgb(230, 230, 230);
-}
-
-.article_list li {
-  height: 50px;
-  padding-left: 10px;
-  line-height: 50px;
-  list-style-type: none;
-  letter-spacing: 1px;
-  font-size: 15px;
-  color: rgb(102, 102, 102);
-  transition: 0.5s;
-  border-radius: 3px;
-}
-
-.article_list li:hover {
-  background-color: rgb(183, 183, 183);
-}
-
-.article_article {
-  position: relative;
-  padding: 20px;
-  border-radius: 1%;
-  top: -545px;
-  left: 380px;
-  width: 1070px;
-  word-wrap: break-word;
-  background-color: #fff;
-}
-
-.article_article p {
-  margin-top: 20px;
-}
-
-.article_article p:nth-child(2) {
-  margin-top: 20px;
-  padding-bottom: 30px;
-}
-
-.article_viewCount {
-  position: absolute;
-  top: 5px;
-  opacity: 0.5;
-  left: 985px;
-}
-
-.article_comments {
-  position: absolute;
-  overflow: hidden;
-  border-radius: 1%;
-  margin-top: 50px;
-  left: 0px;
-  width: 1110px;
-  background-color: #fff;
-}
-
-.article_comments h3 {
-  padding-top: 20px;
-  padding-left: 20px;
-}
-
-.article_comments_write {
-  padding: 20px;
-}
-
-.article_comments_submit {
-  margin-top: 20px;
-  margin-left: 980px;
-}
-
-.article_comments_list li {
-  padding: 20px;
-  border-top: 1px solid rgb(230, 230, 230);
-}
-
-.article_comments_avatar {
-  float: left;
-}
-
-.article_comments_username {
-  margin-top: -17px;
-  margin-left: 50px;
-  font-size: 17px;
-  color: rgb(102, 102, 102);
-}
-
-.article_comments_time {
-  margin-top: -17px;
-  margin-left: -900px;
-  transform: scale(80%);
-  font-size: 14px;
-  color: rgb(102, 102, 102);
-}
-
-.article_comments_comments {
-  margin-top: -8px;
-  margin-left: 50px;
-  font-size: 17px;
-  color: rgb(102, 102, 102);
-}
+@import "../../assets/style/Article/Article.css";
 </style>
