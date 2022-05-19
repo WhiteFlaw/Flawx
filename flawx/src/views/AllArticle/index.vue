@@ -79,7 +79,7 @@ const getUserArticle = () => {
     username: localStorage.getItem("username"),
   }).then((res) => {
     data.allArticle = res.data;
-    dataProcessing(data.allArticle, 5);
+    dataProcessing(data.allArticle, 7);
   });
 };
 
@@ -116,22 +116,5 @@ const deleteArticle = (item) => {
 </script>
 
 <style scoped>
-.allArticle_body {
-  position: relative;
-  width: 100%;
-  height: 750px;
-  background-color: rgb(241, 241, 241);
-}
-
-.article_author {
-  position: absolute;
-  top: 50px;
-  left: 50px;
-}
-
-.allArticle_list {
-  position: absolute;
-  top: -60px;
-  left: 165px;
-}
+@import "../../assets/style/AllArticle/AllArticle.css";
 </style>
