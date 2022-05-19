@@ -13,27 +13,24 @@
         >
           {{ item.article_title }}
         </p>
-        <span
-          style="position: absolute; right: 70px; color: red; padding: 2px"
-          @click="deleteArticle(item)"
-          >删除</span
-        >
-        <span
-          style="position: absolute; right: 140px; color: #409eff; padding: 2px"
-          >编辑</span
-        >
+        <div class="sy-pagination-action">
+          <span @click="deleteArticle(item)" class="sy-pagination-delete"
+            >删除</span
+          >
+          <span class="sy-pagination-edit">编辑</span>
+        </div>
       </li>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="user_article_content_page * 10"
+        class="el_pagination"
+        v-model:current-page="data.currentPage"
+        @current-change="currentChange"
+        @prev-click="prevClick"
+        @next-click="nextClick"
+      />
     </ul>
-    <el-pagination
-      background
-      layout="prev, pager, next"
-      :total="user_article_content_page * 10"
-      class="el_pagination"
-      v-model:current-page="data.currentPage"
-      @current-change="currentChange"
-      @prev-click="prevClick"
-      @next-click="nextClick"
-    />
   </div>
 </template>
 
@@ -45,7 +42,7 @@ import {
   //defineProps,  defineProps不再需要引入
   //defineEmits, defineEmits不再需要引入
   watchEffect,
-  computed //nmmd没引入computed, 这个组件内出错, 会导致所有引入这个组件的页面在某行报错, 而且报错行不是真正错的那行
+  computed, //nmmd没引入computed, 这个组件内出错, 会导致所有引入这个组件的页面在某行报错, 而且报错行不是真正错的那行
 } from "vue";
 import { useRouter } from "vue-router";
 
@@ -117,13 +114,11 @@ const deleteArticle = (item) => {
 </script>
 
 <style scoped>
-.sy-pagination,
-.sy-pagination_empty {
-  position: relative;
-  top: 110px;
-  left: 265px;
-  border-radius: 1%;
+.sy-pagination {
+  display: flex;
   padding: 25px;
+  border-radius: 3px;
+  justify-content: center;
   background-color: rgb(255, 255, 255);
 }
 
@@ -135,41 +130,49 @@ const deleteArticle = (item) => {
 .sy-pagination-middle,
 .sy-pagination_empty-middle {
   height: 350px;
-  width: 850px;
 }
 
-.sy-pagination-large {
+.sy-pagination-large,
+.sy-pagination_empty-large {
   height: 605px;
-  width: 995px;
-}
-
-.el-pagination {
-  position: absolute;
-  top: 90%;
-  left: 35%;
 }
 
 .sy-pagination_screen {
-  border-radius: 1%;
+  display: flex;
+  width: 95%;
+  border-radius: 3px;
+  align-items: center;
+  flex-direction: column;
   background-color: rgb(255, 255, 255);
 }
 
 .sy-pagination_article {
-  border-radius: 5px;
-  overflow: hidden;
+  display: flex;
+  width: 100%;
   padding: 20px;
-  border-bottom: 0.5px solid rgb(192, 191, 191);
+  margin-bottom: 1rem;
+  border-radius: 3px;
+  overflow: hidden;
   list-style-type: none;
+  justify-content: space-between;
+  border-bottom: 0.5px solid rgb(192, 191, 191);
 }
 
 .sy-pagination_article:hover {
   background-color: rgb(248, 248, 248);
-  border-bottom: 0.5px solid rgb(192, 191, 191);
 }
 
 .sy-pagination_article span:nth-child(2):hover {
   border-radius: 5px;
   background-color: rgb(243, 200, 200);
-  border-bottom: 0.5px solid rgb(192, 191, 191);
+}
+
+.sy-pagination-action {
+  display: flex;
+  margin-right: 2rem;
+}
+.sy-pagination-delete {
+  color: rgb(250, 55, 55);
+  margin-right: 2rem;
 }
 </style>
