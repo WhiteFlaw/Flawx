@@ -43,7 +43,7 @@
       </div>
       <div class="home_new_mid">
         <div class="home_new_mid_left">
-          <sy-carousel :height="402" :width="260">
+          <sy-carousel :height="23.5" :width="15">
             <template #sy_carousel_content>
               <el-carousel-item
                 v-for="(item, index) in data.home_new_mid_page_news"
@@ -69,7 +69,7 @@
         </div>
 
         <div class="home_new_mid_right">
-          <sy-carousel :height="402" :width="260">
+          <sy-carousel :height="23.5" :width="15">
             <template #sy_carousel_content>
               <el-carousel-item
                 v-for="(item, index) in data.home_new_mid_page_hot"
@@ -115,39 +115,41 @@
         </el-carousel>
       </div>
     </div>
-    <div class="home_articleList">
-      <sy-tabs :sy_tab_data="data.home_article_type">
-        <template v-slot="slotProps">
-          <ul class="infinite-list" style="overflow: auto">
-            <!-- 这里父组件要用子组件的数据item.id,考虑一下作用域插槽 -->
-            <li
-              v-for="i in data.home_article_content[slotProps.item.id]"
-              :key="i"
-              class="infinite-list-item"
-              @click="toArticle(i.article_id)"
-            >
-              <h3>{{ i.article_title }}</h3>
-              <p v-html="i.article_content.substring(0, 30)"></p>
-            </li>
-          </ul>
-        </template>
-      </sy-tabs>
-    </div>
-    <div class="home_timeList">
-      <el-timeline class="home_timeList_detail">
-        <el-timeline-item
-          v-for="(activity, index) in data.activities"
-          :key="index"
-          :icon="activity.icon"
-          :type="activity.type"
-          :color="activity.color"
-          :size="activity.size"
-          :hollow="activity.hollow"
-          :timestamp="activity.timestamp"
-        >
-          {{ activity.content }}
-        </el-timeline-item>
-      </el-timeline>
+    <div class="home_article">
+      <div class="home_articleList">
+        <sy-tabs :sy_tab_data="data.home_article_type">
+          <template v-slot="slotProps">
+            <ul class="infinite-list" style="overflow: auto">
+              <!-- 这里父组件要用子组件的数据item.id,考虑一下作用域插槽 -->
+              <li
+                v-for="i in data.home_article_content[slotProps.item.id]"
+                :key="i"
+                class="infinite-list-item"
+                @click="toArticle(i.article_id)"
+              >
+                <h3>{{ i.article_title }}</h3>
+                <p v-html="i.article_content.substring(0, 30)"></p>
+              </li>
+            </ul>
+          </template>
+        </sy-tabs>
+      </div>
+      <div class="home_timeList">
+        <el-timeline class="home_timeList_detail">
+          <el-timeline-item
+            v-for="(activity, index) in data.activities"
+            :key="index"
+            :icon="activity.icon"
+            :type="activity.type"
+            :color="activity.color"
+            :size="activity.size"
+            :hollow="activity.hollow"
+            :timestamp="activity.timestamp"
+          >
+            {{ activity.content }}
+          </el-timeline-item>
+        </el-timeline>
+      </div>
     </div>
   </div>
 </template>
@@ -184,7 +186,7 @@ let data = reactive({
     img: "https://s3.bmp.ovh/imgs/2022/04/06/6da731882a64835f.gif",
     article_id: "",
     title: "2022-4-8 | Ver0.1.2更新",
-    text: "最初更新",
+    text: "最新一次更新",
     alt: "home_new_left_detail",
   },
   home_new_mid_page_news: [],
@@ -323,11 +325,6 @@ function getHottestArticle() {
 </script>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-}
-
 .el-collapse {
   position: relative;
   top: 0px;
@@ -351,158 +348,12 @@ function getHottestArticle() {
   transform-origin: left top;
 }
 
-.el-tabs {
-  margin-left: 35px;
-  width: 950px;
-}
-
 .el-tabs__nav {
   height: 70px;
   line-height: 70px;
 }
-*::-webkit-scrollbar {
-  display: none;
-}
 </style>
 <style scoped>
 /* element的类样式不会受到加了scoped的样式影响,可以写一个不带scoped的样式来调整 */
-.home_body {
-  height: 1200px;
-  width: 100%;
-  background-color: rgb(241, 241, 241);
-}
-
-.home_new {
-  position: relative;
-  top: 30px;
-  left: 70px;
-  height: 435px;
-  width: 1380px;
-  border-radius: 1%;
-}
-
-.home_new_left_title p,
-.home_new_left_title img {
-  padding-top: 10px;
-  float: left;
-  font-size: 15px;
-  color: rgb(91, 91, 91);
-}
-
-.home_new_left_img {
-  position: absolute;
-  top: 45px;
-  left: 0px;
-  height: 230px;
-  width: 420px;
-  transition: 1s;
-  background-color: rgb(228, 228, 228);
-}
-
-.home_new_left_detail {
-  position: absolute;
-  top: 290px;
-  height: 110px;
-  width: 410px;
-  border-radius: 3px;
-  padding: 5px;
-  transition: 0.5s;
-  background-color: rgb(228, 228, 228);
-}
-
-.home_new_left_detail p {
-  margin-top: 10px;
-}
-
-.home_new_left_detail:hover,
-.awsl:hover {
-  background-color: rgb(174, 174, 174);
-  color: rgb(235, 235, 235);
-}
-
-.home_new_mid {
-  position: absolute;
-  top: 0px;
-  left: 450px;
-  width: 555px;
-  height: 410px;
-  color: rgba(34, 33, 33);
-  list-style-type: none;
-}
-
-.home_new_mid_left {
-  position: absolute;
-  top: 0;
-}
-
-.home_new_mid_right {
-  position: absolute;
-  top: 0;
-  left: 295px;
-}
-
-.awsl {
-  height: 23.9%;
-  background-color: rgb(228, 228, 228);
-  margin: 3px;
-  border-radius: 3px;
-  transition: 0.5s;
-}
-
-.home_new_right {
-  position: absolute;
-  top: 0;
-  left: 1040px;
-  width: 340px;
-  border-radius: 3px;
-  overflow: hidden;
-  list-style-type: none;
-}
-
-.home_articleList {
-  position: relative;
-  width: 1005px;
-  top: 70px;
-  left: 70px;
-  height: 527px;
-}
-
-.home_timeList {
-  position: absolute;
-  border-radius: 1%;
-  top: 645px;
-  left: 1110px;
-  height: 525px;
-  width: 341px;
-  overflow: hidden;
-  border: 0.5px solid rgb(192, 191, 191);
-}
-
-.home_timeList_detail {
-  height: 100%;
-  padding-top: 30px;
-  padding-left: 30px;
-}
-
-.infinite-list {
-  height: 500px;
-  padding: 10px;
-  margin: 0;
-  list-style: none;
-}
-
-.infinite-list .infinite-list-item {
-  padding: 5px;
-  margin: 5px;
-  border-radius: 1%;
-  height: 140px;
-  border-bottom: 2px solid #000;
-  background-color: rgb(247, 246, 246);
-  transition: 0.5s;
-  border: 0.5px solid rgb(192, 191, 191);
-}
-
-.infinite-list .infinite-list-item:hover {
-  background-color: rgb(228, 228, 228);
-}
+@import "../../assets/style/Home/Home.css";
 </style>
