@@ -6,6 +6,7 @@
         :label="item.label"
         :name="item.name"
         :key="item"
+        @tab-click="handleClick"
       >
         <slot :item="item"></slot>
       </el-tab-pane>
@@ -28,43 +29,21 @@ const props = defineProps({
 
 let sy_tab_data = ref(props.sy_tab_data); //这里是变量, 不要用const;
 
-onUpdated(() => {
-  handleClick();
-});
-
 watchEffect(() => {
   sy_tab_data = props.sy_tab_data;
 });
 </script>
 <style scoped>
 .sy_tabs {
-  position: relative;
-  width: 1005px;
   height: 527px;
-  border-radius: 1%;
+  border-radius: 3px;
   overflow: hidden;
-  background-color: #fff;
   border: 0.5px solid rgb(192, 191, 191);
+  background-color: rgb(239, 239, 239);
 }
 
-.sy_tabs_list {
-  height: 500px;
-  padding: 10px;
-  margin: 0;
-  list-style: none;
-}
-
-.infinite-list .sy_tabs_listitem {
-  padding: 5px;
-  margin: 5px;
-  border-radius: 1%;
-  height: 140px;
-  border-bottom: 2px solid #000;
-  background-color: #fff;
-  border: 0.5px solid rgb(192, 191, 191);
-}
-
-.infinite-list .sy_tabs_listitem:hover {
-  background-color: rgb(247, 246, 246);
+.sy_tabs_main {
+  margin-left: 35px;
+  margin-right: 3.5%;
 }
 </style>
