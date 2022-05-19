@@ -1,3 +1,6 @@
+@import "./update_user.css";
+@import "./update_avatar.css";
+
 .update_body {
   display: flex;
   align-items: center;
@@ -14,19 +17,7 @@
   border-radius: 3px;
 }
 
-.update_user {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  height: 100%;
-  padding: 50px;
-  border-radius: 3px;
-  background-color: #fff;
-  margin-right: 1rem;
-  margin-left: 2rem;
-}
-
+/* 
 .update_dialog {
   height: 200px;
   width: 400px;
@@ -55,35 +46,4 @@
     transform: translateY(100px);
   }
 }
-
-.update_avatar {
-  flex: 1;
-  height: 100%;
-  border-radius: 1%;
-  background-color: #fff;
-  padding: 50px;
-  box-sizing: border-box;
-  margin-left: 1rem;
-  margin-right: 2rem;
-}
-
-.update_avatar_active {
-  background-color: rgb(149, 199, 255);
-}
-
-.update_avatar li {
-  float: left;
-  list-style-type: none;
-  height: 105px;
-  width: 105px;
-  margin-left: 17px;
-  margin-top: 17px;
-  border-radius: 2%;
-  overflow: hidden;
-  background-color: #fff;
-}
-
-.imga:hover {
-  transition: 0.5s;
-  transform: scale(0.9);
-}
+ */

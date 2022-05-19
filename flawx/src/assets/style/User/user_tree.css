@@ -1,0 +1,14 @@
+
+.user_tree {
+    flex: 2;
+    margin-top: 1rem;
+    margin-left: 4%;
+    height: 100%;
+  }
+  
+  .user_publish {
+    margin: 1rem;
+    width: 10rem;
+    height: 40px;
+  }
+  

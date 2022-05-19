@@ -1,0 +1,14 @@
+
+.update_user {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    height: 100%;
+    padding: 50px;
+    border-radius: 3px;
+    background-color: #fff;
+    margin-right: 1rem;
+    margin-left: 2rem;
+  }
+  

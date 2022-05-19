@@ -1,0 +1,15 @@
+.home_timeList {
+    flex: 1;
+    height: 525px;
+    margin-right: 5.5%;
+    margin-left: 2.5%;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 0.5px solid rgb(192, 191, 191);
+}
+
+.home_timeList_detail {
+    height: 100%;
+    padding-top: 2rem;
+    padding-left: 1rem;
+}

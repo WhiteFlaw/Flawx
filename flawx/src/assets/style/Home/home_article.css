@@ -1,0 +1,35 @@
+
+.home_article {
+    display: flex;
+    height: 530px;
+    width: 100%;
+    margin-top: 3rem;
+}
+
+.home_articleList {
+    flex: 3;
+    height: 527px;
+    margin-left: 4.8%;
+}
+
+
+.infinite-list {
+    border-radius: 3px;
+    list-style-type: none;
+    border: 0.5px solid rgb(192, 191, 191);
+}
+
+.infinite-list .infinite-list-item {
+    width:100%;
+    height: 140px;
+    padding: 5px;
+    margin: 5px;
+    transition: 0.5s;
+    border-radius: 1%;
+    border: 0.5px solid rgb(192, 191, 191);
+    background-color: rgb(247, 246, 246);
+}
+
+.infinite-list .infinite-list-item:hover {
+    background-color: rgb(228, 228, 228);
+}

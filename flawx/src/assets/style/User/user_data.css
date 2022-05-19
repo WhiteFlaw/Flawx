@@ -1,0 +1,23 @@
+
+.user_articledata {
+    display: flex;
+    height: 190px;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 3px;
+    background-color: rgb(255, 255, 255);
+  }
+  
+  .user_articledata_detail {
+    height: 80px;
+    line-height: 40px;
+    text-align: center;
+    list-style-type: none;
+  }
+  
+  .user_articledata_detail p:nth-child(2) {
+    font-family: "微软雅黑";
+    font-weight: 600;
+    font-size: 22px;
+  }

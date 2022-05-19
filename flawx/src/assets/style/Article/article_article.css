@@ -1,0 +1,36 @@
+
+.article_article {
+    flex: 3.5;
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+    margin-right: 2rem;
+  }
+  
+  .article_content {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 1%;
+    width: 96.5%;
+    word-wrap: break-word;
+    background-color: #fff;
+  
+  }
+  
+  .article_title {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .article_text {
+    flex: 4;
+  }
+  
+  .article_text p {
+    margin-top: 20px;
+  }
+  
+  .article_title {
+    opacity: 0.5;
+  }
