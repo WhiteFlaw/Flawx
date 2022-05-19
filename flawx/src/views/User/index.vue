@@ -1,10 +1,10 @@
 <template>
   <sy-nav-bar></sy-nav-bar>
   <div class="user_body">
-    <el-button type="primary" round class="user_publish" @click="publish"
-      >发布</el-button
-    >
     <div class="user_tree">
+      <el-button type="primary" round class="user_publish" @click="publish"
+        >发布</el-button
+      >
       <el-tree
         :data="tree"
         :props="defaultProps"
@@ -12,25 +12,29 @@
         :default-expand-all="true"
       /><!-- 绑定的方法还是不要加括号了,真的会导致传不过去值之类的错误,至少现在在element里发现了这个错误,这里的handleNodeClick加括号获取不到点击的节点信息; -->
     </div>
-    <ul class="user_articledata">
-      <li
-        class="user_articledata_detail"
-        v-for="item in data.user_articledata_detail"
-        :key="item"
-      >
-        <p>{{ item.articledata_title }}</p>
-        <p>{{ item.articledata_data }}</p>
-      </li>
-    </ul>
-    <!--     <div v-if="data.user_article_content !== ''" class="user_article_list_empty">
+    <div class="user_content">
+      <ul class="user_articledata">
+        <li
+          class="user_articledata_detail"
+          v-for="item in data.user_articledata_detail"
+          :key="item"
+        >
+          <p>{{ item.articledata_title }}</p>
+          <p>{{ item.articledata_data }}</p>
+        </li>
+      </ul>
+      <!--     <div v-if="data.user_article_content !== ''" class="user_article_list_empty">
       <el-empty description="你还没有写过什么呢..." />
     </div> -->
-    <sy-pagination
-      size="middle"
-      v-model:user_article_content_page="data.user_article_content_page"
-      v-model:newArr="data.newArr"
-      @deleteArticle="deleteArticle"
-    ></sy-pagination>
+      <div class="sy-pagination">
+        <sy-pagination
+          size="middle"
+          v-model:user_article_content_page="data.user_article_content_page"
+          v-model:newArr="data.newArr"
+          @deleteArticle="deleteArticle"
+        ></sy-pagination>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -150,7 +154,7 @@ const deleteArticle = (item) => {
   }
   data.allArticle = temArr;
   dataProcessing(data.allArticle, 5);
-  
+
   toDeleteArticle({
     article_id: item.article_id,
   }).then((res) => {
@@ -163,75 +167,15 @@ const deleteArticle = (item) => {
 };
 </script>
 <style>
-.el-page-header {
-  float: left;
-  height: 45px;
-  padding-right: 20px;
-  padding-left: 20px;
-  line-height: 45px;
+.el-tree {
+  display: flex;
+  flex-direction: column;
 }
-
-.el-breadcrumb {
-  float: left;
-  line-height: 45px;
-  height: 45px; /* 别改这里 */
-  width: 100%;
-  background-color: rgb(255, 255, 255);
-  box-shadow: 5px 3px 10px #888888;
-  border-radius: 2px;
-}
-
 .el-tree-node__content {
   height: 60px;
   background-color: rgb(241, 241, 241);
 }
 </style>
 <style scoped>
-.user_body {
-  height: 740px;
-  width: 100%;
-  background-color: rgb(241, 241, 241);
-}
-
-.user_publish {
-  position: fixed;
-  top: 90px;
-  left: 38px;
-  width: 175px;
-  height: 40px;
-}
-
-.user_tree {
-  position: fixed;
-  left: 38px;
-  top: 140px;
-  height: 100%;
-  width: 230px;
-}
-
-.user_articledata {
-  position: relative;
-  top: 90px;
-  left: 265px;
-  height: 190px;
-  width: 898px;
-  border-radius: 1%;
-  background-color: rgb(255, 255, 255);
-}
-
-.user_articledata_detail {
-  height: 80px;
-  line-height: 40px;
-  text-align: center;
-  margin-top: 10px;
-  margin-left: 135px;
-  list-style-type: none;
-  float: left;
-}
-
-.user_articledata_detail p:nth-child(2) {
-  font-family: "微软雅黑";
-  font-weight: 600;
-  font-size: 22px;
-}
+@import "../../assets/style/User/User.css";
 </style>
