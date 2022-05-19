@@ -1,24 +1,26 @@
 <template>
   <sy-nav-bar></sy-nav-bar>
   <div class="publish_body">
-    <p style="color: pink; padding-top: 60px; padding-left: 150px">
-      att: 这个模块现在不支持保存,在你退出本页面后, 所有写下的内容将会清空.
-    </p>
-    <div class="publish_title">
-      <el-input
-        type="text"
-        v-model.trim="data.article_title"
-        placeholder="Title There..."
-      />
+    <div class="publish_main">
+      <div class="publish_title">
+        <p>
+          Atten: 这个模块现在不支持保存,在你退出本页面后, 所有写下的内容将会清空.
+        </p>
+        <el-input
+          type="text"
+          v-model.trim="data.article_title"
+          placeholder="Title There..."
+        />
+      </div>
+      <div class="publish_content">
+        <div class="editor" name="editor" id="editor" ref="editor"></div>
+      </div>
+      <el-button
+        @click="publish_submitArticle"
+        style="padding: 20px; margin-left: 10px"
+        >发表文章</el-button
+      >
     </div>
-    <div class="publish_content">
-      <div class="editor" name="editor" id="editor" ref="editor"></div>
-    </div>
-    <el-button
-      @click="publish_submitArticle"
-      style="padding: 20px; margin-left: 10px"
-      >发表文章</el-button
-    >
   </div>
 </template>
 
@@ -120,24 +122,5 @@ function publish_submitArticle() {
 }
 </script>
 <style scoped>
-.publish_body {
-  height: 740px;
-  width: 100%;
-  background-color: rgb(241, 241, 241);
-}
-
-.publish_title {
-  position: relative;
-  width: 1200px;
-  top: 20px;
-  left: 150px;
-  width: 1200px;
-}
-
-.publish_content {
-  position: relative;
-  top: 50px;
-  left: 150px;
-  width: 1200px;
-}
+@import "../../assets/style/Publish/Publish.css";
 </style>
