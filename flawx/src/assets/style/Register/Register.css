@@ -1,0 +1,22 @@
+.register_body {
+    height: 740px;
+    width: 100%;
+    background-color: rgb(241, 241, 241);
+  }
+  
+  .register_container {
+    position: relative;
+    top: 150px;
+    left: 550px;
+    width: 400px;
+    background-color: #fff;
+    border-radius: 2px;
+  }
+  
+  .el-form-item {
+    padding: 8px;
+  }
+  
+  .el-form {
+    padding: 50px;
+  }

@@ -1,0 +1,27 @@
+.publish_body {
+  display: flex;
+  height: 700px;
+  width: 100%;
+  background-color: rgb(241, 241, 241);
+}
+
+.publish_main {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+}
+
+.publish_title {
+  width: 90%;
+}
+
+.publish_title p {
+  color: rgb(250, 55, 55);
+}
+
+.publish_content {
+  width: 90%;
+}
