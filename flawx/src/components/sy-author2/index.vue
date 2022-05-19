@@ -1,16 +1,18 @@
 <template>
   <div class="author">
-    <div class="author_avatar">
-      <el-avatar :size="120" :src="author_avatar" />
-    </div>
-    <div class="author_name">
-      <p v-html="author_name"></p>
-    </div>
-    <div class="author_age">
-      <p v-html="author_age"></p>
-    </div>
-    <div class="author_tag">
-      <slot name="tag"></slot>
+    <div class="author-content">
+      <div class="author_avatar">
+        <el-avatar :size="120" :src="author_avatar" />
+      </div>
+      <div class="author_name">
+        <p v-html="author_name"></p>
+      </div>
+      <div class="author_age">
+        <p v-html="author_age"></p>
+      </div>
+      <div class="author_tag">
+        <slot name="tag"></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -50,26 +52,28 @@ watchEffect(() => {
 
 <style scoped>
 .author {
-  position: relative;
-  top: 0px;
-  left: 0px;
-  border-radius: 1%;
+  display: flex;
+  border-radius: 3px;
   background-color: rgb(255, 255, 255);
   height: 655px;
-  width: 320px;
+  width: 100%;
+}
+
+.author-content {
+  display: flex;
+  margin-top: 20%;
+  width: 100%;
+  height: 50%;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .author_avatar {
-  position: absolute;
-  top: 100px;
-  left: 96px;
   background-position: 50% 50%;
 }
 
 .author_name {
-  position: absolute;
-  top: 250px;
-  left: 115px;
   padding-right: 10px;
   padding-left: 10px;
   border-radius: 20px;
@@ -81,9 +85,6 @@ watchEffect(() => {
 }
 
 .author_age {
-  position: absolute;
-  top: 300px;
-  left: 80px;
   height: 30px;
   padding-right: 5px;
   padding-left: 5px;
@@ -97,12 +98,9 @@ watchEffect(() => {
 }
 
 .author_tag {
-  position: absolute;
-  top: 350px;
-  left: 60px;
-  height: 30px;
-  width: 200px;
   display: flex;
+  height: 30px;
+  width: 60%;
   justify-content: space-between;
   align-items: center;
 }
