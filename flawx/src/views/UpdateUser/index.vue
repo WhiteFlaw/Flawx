@@ -1,27 +1,4 @@
 <template>
-  <sy-nav-bar></sy-nav-bar>
-<!--   <div
-    class="update_dialog"
-    ref="dialog"
-    :class="{
-      update_dialog_active: data.update_dialog_active === true,
-    }"
-  >
-    <p style="margin: 0 auto">名为{{ data.ruleForm.username }}</p>
-    <p>的{{ data.ruleForm.sex }}啊</p>
-    <p>你愿意作为另一个「人」继续生活下去麽?</p>
-
-    <div style="margin-left: 100px; margin-top: 30px">
-      <el-button type="primary" @click="cancelSubmit()">再想想</el-button>
-      <el-button
-        type="warning"
-        style="margin-left: 50px"
-        @click="submitForm()"
-        plain
-        >是的</el-button
-      >
-    </div>
-  </div> -->
   <div class="update_body">
     <div class="update_container">
       <div class="update_user">
@@ -141,7 +118,6 @@ import md5 from "js-md5";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 import { reactive, ref } from "vue";
-import SyNavBar from "../../components/sy-navbar";
 import { toUpdateUserData, toUpdateAvatar } from "./UpdateUser";
 
 const updateForm = ref(null);
