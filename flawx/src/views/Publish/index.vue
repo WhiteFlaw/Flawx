@@ -4,7 +4,8 @@
     <div class="publish_main">
       <div class="publish_title">
         <p>
-          Atten: 这个模块现在不支持保存,在你退出本页面后, 所有写下的内容将会清空.
+          Atten: 这个模块现在不支持保存,在你退出本页面后,
+          所有写下的内容将会清空.
         </p>
         <el-input
           type="text"
@@ -17,7 +18,9 @@
       </div>
       <el-button
         @click="publish_submitArticle"
-        style="padding: 20px; margin-left: 10px"
+        style="width: 30%; padding:20px;"
+        type="primary"
+        plain
         >发表文章</el-button
       >
     </div>
@@ -28,7 +31,6 @@
 import { onMounted, ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
 import EWangEditor from "wangeditor";
-import SyNavBar from "../../components/sy-navbar";
 import { toPublish } from "./Publish";
 
 let data = reactive({
