@@ -1,16 +1,10 @@
 <template>
-  <sy-nav-bar></sy-nav-bar>
   <div class="login_body">
     <div class="drops">
       <div class="drop"></div>
       <div class="drop"></div>
       <div class="drop"></div>
       <div class="drop"></div>
-    </div>
-    <div class="login_introduction">
-      <!-- <h2>Welcome To FlawX</h2> -->
-      <h2>XXXXXXXXXXXXX</h2>
-      <p v-html="login_introduction"></p>
     </div>
     <div class="login_main">
       <div class="login_container">
@@ -146,7 +140,6 @@ import md5 from "js-md5";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 import { reactive, ref } from "vue";
-import SyNavBar from "../../components/sy-navbar";
 import { toSubmitForm_mima } from "./Login";
 
 const loginForm_mima = ref(null);
