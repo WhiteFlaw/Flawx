@@ -1,5 +1,4 @@
 <template>
-  <sy-nav-bar></sy-nav-bar>
   <div class="article_body">
     <div class="article_else">
       <div class="article_author">
@@ -80,7 +79,7 @@
         <ul class="article_comments_list">
           <li v-for="item in data.article_comments_list" :key="item">
             <div class="article_comments_avatar">
-              <el-avatar size="default" :src="item.comment_avatar" />
+              <el-avatar size="middle" :src="item.comment_avatar" />
             </div>
             <div class="article_comments_username">
               <p v-text="item.comment_name"></p>
@@ -109,7 +108,6 @@
 import { reactive, ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { ElMessage } from "element-plus";
-import SyNavBar from "../../components/sy-navbar";
 import SyAuthor1 from "../../components/sy-author1";
 import {
   toSubmitComments,
@@ -164,7 +162,7 @@ function article_comments_submit(textarea) {
       article_id: $route.query.id, //不是$router
       //发表时间甚麽的就交给后端吧
     }).then(() => {
-      this.$message({ message: "评论成功.", type: "success" });
+      ElMessage.success("评论成功.");
       //先push进去显示着,下次它再进来再请求
       data.article_comments_list.push({
         comment_name: username,
