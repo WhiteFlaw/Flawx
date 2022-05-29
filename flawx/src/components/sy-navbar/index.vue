@@ -1,36 +1,40 @@
 <template>
-  <el-breadcrumb separator="/">
+  <el-breadcrumb separator="/" class="el-bread">
     <el-page-header :content="data.nav_data.pageName" @back="goBack" />
     <el-breadcrumb-item @click="goHome">Home</el-breadcrumb-item>
-    <!-- 下一步将该元素绑定到上一个路由 -->
     <el-breadcrumb-item>{{ data.nav_data.pageName }}</el-breadcrumb-item>
     <div class="userData">
-      <p style="float: right; margin-right: 120px">
-        {{ data.nav_data.username }}
-      </p>
       <el-avatar
         @click="toUser()"
         shape="square"
         :size="35"
-        style="float: right; margin: 8px 10px 15px"
         :src="data.nav_data.avatar"
       />
+      <p>
+        {{ data.nav_data.username }}
+      </p>
+      <div class="sy-switch">
+        <sy-switch></sy-switch>
+      </div>
     </div>
-    <ul class="pushOut">
-      <li
-        v-for="item in data.pushOut"
-        :key="item"
-        @click="clickPushOut(item.link)"
-      >
-        {{ item.content }}
-      </li>
-    </ul>
+    <div class="pushout">
+      <ul>
+        <li
+          v-for="item in data.pushout"
+          :key="item"
+          @click="clickPushOut(item.link)"
+        >
+          {{ item.content }}
+        </li>
+      </ul>
+    </div>
   </el-breadcrumb>
 </template>
 
 <script setup>
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, watchEffect } from "vue";
 import { ElMessage } from "element-plus";
+import sySwitch from "../sy-switch";
 import { useRoute, useRouter } from "vue-router";
 const $router = useRouter();
 const $route = useRoute();
@@ -42,7 +46,7 @@ let data = reactive({
     username: "未登录", //用户名
     avatar: "", //头像
   },
-  pushOut: [
+  pushout: [
     { content: "占位", link: "" },
     { content: "个人中心", link: "/user" },
     { content: "编辑信息", link: "/user/updateUser" },
@@ -57,8 +61,13 @@ onMounted(() => {
 });
 
 function getPageName() {
+  data.nav_data.pageName = $route.name; //刚刷新页面没有做到一半改了devServer了一下又有了, 一般就是因为没有watch.
+} //在App.vue里获取当前页面name依旧可以使用$route.name, 可能因为router-view加载在导航栏之后所以导航栏组件获取不到页面名
+//watch一下即可;
+
+watchEffect(() => {
   data.nav_data.pageName = $route.name;
-}
+});
 
 function goHome() {
   $router.push("/");
@@ -108,61 +117,80 @@ function toUser() {
 </script>
 
 <style scoped>
+.el-breadcrumb {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-light2);
+}
+
+.el-breadcrumb__item:nth-child(2) {
+  margin-left: 1rem;
+}
+
 .el-page-header {
-  float: left;
   height: 50px;
   padding-right: 20px;
   padding-left: 20px;
   line-height: 50px;
 }
 
-.el-breadcrumb {
-  line-height: 50px;
-  height: 50px; /* 别改这里 */
+.userData {
+  display: flex;
+  height: 3rem;
   width: 100%;
-  background-color: rgb(255, 255, 255);
-  box-shadow: 5px 3px 10px #888888;
-  border-radius: 2px;
-  z-index: 3000;
+  align-items: center;
+  margin-right: 4%;
+  justify-content: flex-end;
 }
 
-.pushOut {
-  position: relative;
-  list-style-type: none;
-  float: right;
-  width: 130px;
-  text-align: center;
-  margin-right: -135px;
+.userData p {
+  margin-left: 1rem;
+}
+
+.sy-switch {
+  margin-left: 2rem;
+  z-index: 4000;
+}
+
+.pushout {
+  position: fixed;
+  top: 1%;
+  left: 84%;
   display: none;
-  opacity: 1;
-  margin-top: 0px;
-  border-radius: 3px;
-  transition: all 0.3s linear;
   z-index: 3000;
 }
 
-.pushOut li {
-  background-color: rgb(255, 255, 255);
+.pushout ul {
+  display: flex;
+  width: 8rem;
+  flex-direction: column;
+}
+
+.pushout li {
+  display: flex;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-light1);
   box-shadow: 5px 5px 5px 0px #888888;
 }
 
-.pushOut li:hover {
-  background-color: rgb(219, 219, 219);
-  transition: all 0.3s linear;
-}
-
-.pushOut li:nth-child(1) {
+.pushout ul li:nth-child(1) {
   margin-bottom: 10px;
   height: 45px;
   opacity: 0;
 }
 
-.userData:hover + .pushOut {
+.userData:hover + .pushout {
   display: block;
-  opacity: 0;
 }
 
-.pushOut:hover {
+.pushout:hover {
   display: block;
+}
+
+.pushout li:hover {
+  background-color: var(--color-light2);
+  transition: all 0.3s linear;
 }
 </style>
