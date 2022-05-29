@@ -1,5 +1,4 @@
 <template>
-  <sy-nav-bar></sy-nav-bar>
   <div class="allArticle_body">
     <div class="article_author">
       <sy-author-2
@@ -30,7 +29,6 @@ import { reactive, onMounted } from "vue";
 import { ElMessage } from "element-plus";
 import SyAuthor2 from "../../components/sy-author2";
 import SyPagination from "../../components/sy-pagination";
-import SyNavBar from "../../components/sy-navbar";
 import { toGetUserData, toGetUserArticle, toDeleteArticle } from "./AllArticle";
 
 let data = reactive({
