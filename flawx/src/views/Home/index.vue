@@ -1,5 +1,4 @@
 <template>
-  <sy-nav-bar></sy-nav-bar>
   <div class="home_body">
     <el-collapse @change="handleChange">
       <el-collapse-item title="站内导航" name="1" style="margin-top: 40px">
@@ -158,7 +157,6 @@
 import { onMounted, ref, reactive, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { MoreFilled } from "@element-plus/icons-vue";
-import SyNavBar from "../../components/sy-navbar";
 import SyCarousel from "../../components/sy-carousel";
 import SyTabs from "../../components/sy-tabs";
 import {
@@ -193,22 +191,22 @@ let data = reactive({
   home_new_mid_page_hot: [],
   home_adver_right_index: [
     {
-      url: "https://img-bss.csdn.net/1647926800463.jpg",
+      url: "",
       text: "",
       alt: "",
     },
     {
-      url: "https://img-bss.csdn.net/1648036050414.png",
+      url: "",
       text: "",
       alt: "",
     },
     {
-      url: "https://img-bss.csdn.net/1647921575623.png",
+      url: "",
       text: "",
       alt: "",
     },
     {
-      url: "https://img-bss.csdn.net/1647486977227.png",
+      url: "",
       text: "",
       alt: "",
     },
@@ -331,15 +329,17 @@ function getHottestArticle() {
 }
 
 .el-collapse-item__header {
+  display: block;
   line-height: 45px;
   text-align: center;
-  display: block;
+  background-color: var(--color-light2);
 }
 
 .el-collapse-item__content {
   display: flex;
   justify-content: space-around;
   padding-top: 20px;
+  background-color: var(--color-light3);
 }
 
 .el-carousel p {
