@@ -1,5 +1,4 @@
 <template>
-  <sy-nav-bar></sy-nav-bar>
   <div class="user_body">
     <div class="user_tree">
       <el-button type="primary" round class="user_publish" @click="publish"
@@ -42,7 +41,6 @@
 import { reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-import SyNavBar from "../../components/sy-navbar";
 import SyPagination from "../../components/sy-pagination";
 import { toGetUserData, toGetUserArticle, toDeleteArticle } from "./User";
 
